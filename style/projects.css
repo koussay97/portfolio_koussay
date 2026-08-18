@@ -1,0 +1,174 @@
+/* ==========================================
+   PROJECTS GRID & 3D FLIP ARCHITECTURE
+========================================== */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 5rem;
+    grid-auto-flow: dense;
+    align-items: start;
+    position: relative; /* Crucial for FLIP animations */
+}
+
+.project-card {
+    perspective: 2000px;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    /* Note: No CSS transform transition here, GSAP handles the FLIP movement */
+}
+
+/* Expanded Card Span */
+.project-card.is-active {
+    grid-column: 1 / -1;
+    z-index: 10;
+}
+
+@media (min-width: 768px) {
+    .project-card.is-active {
+        grid-column: span 2;
+        grid-row: span 2; 
+    }
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 450px; /* Base IDLE height */
+    transform-style: preserve-3d;
+    transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card.is-active .card-inner {
+    height: 600px; /* Tighter EXPANDED height */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--accent, #F59E0B);
+    border-radius: 16px;
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 1.5rem;
+    background: var(--bg-primary, #F3F4F6);
+    border: 1px solid var(--glass-border, rgba(255,255,255,0.6));
+    box-shadow: var(--glass-shadow, 0 8px 32px 0 rgba(31, 38, 135, 0.07));
+    overflow: hidden;
+    visibility: hidden; 
+}
+
+.hidden { display: none !important; }
+
+/* Front Face Orientations */
+.face-front { transform: rotateY(0deg) rotateX(0deg); visibility: visible; }
+
+.front-idle-content {
+    display: flex; flex-direction: column; height: 100%; justify-content: space-between;
+}
+.img-container {
+    width: 100%; border-radius: 12px; overflow: hidden; background: #000; aspect-ratio: 16/10;
+}
+.project-cover { width: 100%; height: 100%; object-fit: cover; display: block; }
+.project-info { margin-top: 1rem; text-align: center; }
+.project-info h4 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+.project-info p { color: var(--text-muted, #6B7280); font-size: 0.9rem; margin-bottom: 1rem; }
+
+/* Front Expanded state */
+.front-expanded-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 1rem;
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Carousel (Now takes ~55% of the card height) */
+.carousel-container {
+    flex: 0 0 55%; 
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+}
+.carousel-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.5s ease-in-out; }
+.carousel-slide.active { opacity: 1; }
+.carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
+.carousel-indicators {
+    position: absolute; bottom: 12px; width: 100%; display: flex; justify-content: center; gap: 8px; z-index: 5;
+}
+.indicator {
+    width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: all 0.3s;
+}
+.indicator.active { background: var(--accent, #F59E0B); transform: scale(1.2); }
+
+/* Compact Scrollable Info */
+.expanded-info {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    margin: 0;
+    padding-right: 5px;
+}
+.expanded-info::-webkit-scrollbar { width: 4px; }
+.expanded-info::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+.expanded-info h4 { font-size: 1.2rem; margin-bottom: 0.3rem; }
+.expanded-info p { font-size: 0.85rem; margin-bottom: 0; text-align: left; line-height: 1.5; }
+
+/* Detail Gallery (Clean 9:16 Mobile Ratio) */
+.detail-gallery-container {
+    display: flex; gap: 12px; overflow-x: auto;
+    padding: 5px; flex: 0 0 85px; /* Fixed height so it doesn't squash */
+    scrollbar-width: none; /* Hide scrollbar for clean look */
+}
+.detail-gallery-container::-webkit-scrollbar { display: none; }
+
+.detail-gallery-img {
+    height: 100%;
+    aspect-ratio: 9 / 16; /* Perfect standard mobile aspect ratio */
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.detail-gallery-img:hover {
+    border-color: var(--accent, #F59E0B);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+/* Back Content */
+.back-content { display: flex; gap: 1.5rem; height: 100%; }
+.parallax-wrapper { flex: 0 0 35%; height: 100%; border-radius: 12px; overflow: hidden; position: relative; }
+.parallax-wrapper img { width: 140%; height: 140%; object-fit: cover; position: absolute; top: -20%; left: -20%; }
+.text-content { flex: 1; display: flex; flex-direction: column; justify-content: space-between; height: 100%; overflow: hidden; }
+.scrollable-text { flex-grow: 1; overflow-y: auto; padding-right: 10px; }
+.scrollable-text h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--text-main); }
+.scrollable-text p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.8rem; line-height: 1.6; }
+
+/* Final View */
+.final-content { display: flex; flex-direction: column; justify-content: space-between; height: 100%; text-align: center; }
+.role-contribution p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.7; }
+.duration-badge { display: inline-block; padding: 6px 12px; background: rgba(245, 158, 11, 0.1); color: var(--accent); border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-top: 1rem;}
+.links-grid { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 2rem 0; }
+.store-link { padding: 8px 16px; border: 1px solid var(--text-main); color: var(--text-main); text-decoration: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; transition: all 0.3s; }
+.store-link:hover { background: var(--text-main); color: var(--bg-primary); transform: translateY(-2px); }
+
+/* Buttons & Alignment */
+.card-actions { display: flex; gap: 10px; padding-top: 10px; flex: 0 0 auto; }
+.end-align { justify-content: flex-end; }
+.spread-align { justify-content: space-between; }
+.action-btn, .nav-btn { background: var(--card-dark, #1F2937); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; transition: background 0.3s; }
+.action-btn:hover, .nav-btn:hover { background: var(--accent, #F59E0B); }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Lightbox */
+.lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(10px); cursor: zoom-out; }
+.lightbox.active { display: flex; }
+.lightbox-content { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 8px; box-shadow: 0 0 30px rgba(0,0,0,0.5); animation: zoomIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.lightbox-close { position: absolute; top: 30px; right: 40px; color: white; font-size: 40px; cursor: pointer; transition: color 0.3s; }
+.lightbox-close:hover { color: var(--accent); }
+@keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
