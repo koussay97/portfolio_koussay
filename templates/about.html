@@ -1,11 +1,78 @@
 <section id="about">
-    <h2 class="section-header fade-up">Architectural Vision</h2>
+    <h2 class="section-header fade-up">The Operator</h2>
+    
     <div class="about-grid">
-        <img id="avatar-placeholder" class="fade-up" src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop" alt="Arkana Labs Core" />
-        <div class="about-text glass-panel fade-up" style="padding: 3rem;">
-            <h3>Engineering the Future</h3>
-            <p>Specializing in high-performance, cross-platform mobile architecture. The mission is to bridge complex system logic with elegant, functional user experiences.</p>
-            <p>Driven by <strong>Clean Architecture</strong> principles, leveraging robust monorepo management strategies to streamline development cycles and maintain structural integrity across scalable product ecosystems.</p>
+        <!-- Founder Portrait -->
+        <img id="avatar-placeholder" class="fade-up" src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop" alt="Arkana Labs Founder" />
+        
+        <!-- Core Narrative -->
+        <div class="about-text glass-panel fade-up">
+            <h3>Built by an Individual. Scaled for the Enterprise.</h3>
+            <p>Arkana Labs is a specialized software architecture practice founded and operated entirely by a single senior engineer. While professional communications often use "we" to represent the entity, the reality is a deliberate, highly focused individual operation.</p>
+            <p>Operating solo ensures that high-level architectural decisions remain strictly aligned with low-level implementation. There is no breakdown in communication between the person who designs the component contract and the person who writes the code.</p>
+            
+            <div class="team-action-wrapper">
+                <button id="btn-meet-team" class="action-btn">View Team Structure</button>
+            </div>
+        </div>
+    </div>
+
+<!-- The "Me, Myself, and I" Easter Egg -->
+    <div id="team-easter-egg" class="team-grid-container">
+        
+        <div class="team-grid-inner">
+            
+            <!-- Master: The Cards -->
+            <div class="team-grid">
+                <!-- ADDED 'is-active' HERE -->
+                <div class="team-card glass-panel is-active" data-target="detail-architect">
+                    <h4>Me</h4>
+                    <p class="role">Software Architect</p>
+                    <p>Defines system boundaries, domain models, and component contracts.</p>
+                </div>
+                <div class="team-card glass-panel" data-target="detail-mobile">
+                    <h4>Myself</h4>
+                    <p class="role">Mobile Engineer</p>
+                    <p>Translates architecture into high-performance cross-platform applications.</p>
+                </div>
+                <div class="team-card glass-panel" data-target="detail-devops">
+                    <h4>And I</h4>
+                    <p class="role">Platform & DevOps</p>
+                    <p>Orchestrates layered CI/CD pipelines to ensure reliable delivery.</p>
+                </div>
+            </div>
+
+            <!-- Detail: The Expanded Viewer -->
+            <div id="team-detail-viewer" class="team-detail-viewer glass-panel">
+                
+
+                <!-- Architect Details (ADDED 'is-active' HERE) -->
+                <div id="detail-architect" class="detail-pane is-active">
+                    <h5>Architectural Philosophy</h5>
+                    <p>Architecture exists to enable change. I employ <strong>Domain-Driven Design (DDD)</strong> and <strong>Ports & Adapters (Hexagonal)</strong> architecture to strictly decouple business logic from infrastructure.</p>
+                    <p>My approach is rooted in <strong>contract-first component design</strong>: every boundary is defined by its inputs, outputs, and invariants before implementation begins. <strong>Test-Driven Development (TDD)</strong> ensures these contracts remain mathematically proven and durable over time.</p>
+                </div>
+
+                <!-- Mobile Details -->
+                <div id="detail-mobile" class="detail-pane">
+                    <h5>Mobile Engineering Philosophy</h5>
+                    <p>Achieving true cross-platform capability requires more than a shared codebase; it requires a custom responsive architecture tailored for "write once, execute anywhere" fidelity.</p>
+                    <p>Using <strong>Flutter</strong>, I architect decoupled UI systems backed by the <strong>BLoC pattern</strong> and <strong>RxDart</strong>. I heavily leverage Functional Programming paradigms and <strong>Freezed</strong> for immutable code generation, cataloging atomic UI components via <strong>Widgetbook</strong> to ensure a scalable, highly predictable visual language.</p>
+                </div>
+
+                <!-- DevOps Details -->
+                <div id="detail-devops" class="detail-pane">
+                    <h5>Layered, Agnostic CI/CD Pipelines</h5>
+                    <p>I am uncompromising on deployment processes. I architect layered CI/CD pipelines to prevent vendor lock-in and guarantee consistency:</p>
+                    <ul>
+                        <li><strong>Outer Layer:</strong> Manages build-machine orchestration (GitHub Actions) using FVM to eliminate SDK migration bottlenecks.</li>
+                        <li><strong>Core Layer:</strong> Leverages Fastlane as the industry standard, utilizing custom Ruby scripts to target specific distribution channels.</li>
+                        <li><strong>Lower Layer:</strong> Manages workspace setup, SDK configuration, and product flavors via Melos.</li>
+                        <li><strong>Execution:</strong> Wrapped in shell scripts so the exact same pipeline can be executed locally for testing or remotely on the CI machine.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+

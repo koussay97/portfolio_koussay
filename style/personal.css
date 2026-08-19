@@ -1,0 +1,17 @@
+.personal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 3rem;
+}
+.personal-card {
+    border-left: 3px solid var(--text-muted); /* Different visual anchor than pro projects */
+    padding: 2.5rem;
+    transition: transform 0.3s, border-color 0.3s;
+}
+.personal-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+}
+.personal-card h4 { font-size: 1.4rem; color: var(--text-main); margin-bottom: 0.5rem; }
+.personal-card .tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 1.5rem; font-weight: 700; }
+.personal-card p:not(.tag) { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; }

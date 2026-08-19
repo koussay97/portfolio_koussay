@@ -6,114 +6,70 @@
         <!-- ========================================== -->
         <!-- PROJECT 1: JOEL APPS                       -->
         <!-- ========================================== -->
-        <div class="project-card glass-panel fade-up" data-project="joel">
+        <div class="project-card fade-up" data-project="joel">
             <div class="card-inner">
-
-                <!-- FACE 0: FRONT (IDLE & EXPANDED) -->
-                <div class="card-face face-front">
-                    <!-- IDLE STATE -->
+                <div class="card-face face-front glass-panel">
                     <div class="front-idle-content">
                         <div class="img-container">
                             <img class="project-cover" src="./assets/joel/joel_mockup.jpeg" alt="Joel apps">
                         </div>
                         <div class="project-info">
-                            <h4>Joel apps</h4>
-                            <p>An enterprise mobile application structured within a complex monorepo ecosystem.</p>
-                            <button class="action-btn read-more-btn">Read More</button>
+                            <h4>Joel Apps</h4>
+                            <p>Architecting a closed-loop gig-economy ecosystem within a scalable Flutter monorepo.</p>
+                            <button class="action-btn read-more-btn">Explore Context</button>
                         </div>
                     </div>
-
-                    <!-- EXPANDED STATE -->
                     <div class="front-expanded-content hidden">
                         <div class="carousel-container">
                             <div class="carousel-slide active"><img src="./assets/joel/joel_mockup.jpeg" alt="Slide 1"></div>
                             <div class="carousel-slide"><img src="./assets/joel/joel_mockup2.jpeg" alt="Slide 2"></div>
                             <div class="carousel-indicators"></div>
                         </div>
-
                         <div class="project-info expanded-info">
-                            <h4>Joel apps</h4>
-                            <p>An enterprise mobile application structured within a complex monorepo ecosystem. It features a highly decoupled UI system natively adapted for accessibility.</p>
+                            <h4>Mission & Constraints</h4>
+                            <p>Joel Apps is an enterprise service fulfillment platform. The primary constraint was moving beyond a standard "happy path" gig-app to build a dynamic transaction state machine managing pre-job logistics, automated invoicing, and complex edge-case lifecycle events (cancellations, price renegotiations) autonomously.</p>
                         </div>
-
                         <div class="detail-gallery-container">
                             <img src="./assets/joel/image 3.png" class="detail-gallery-img" alt="Screen">
                             <img src="./assets/joel/image 5.png" class="detail-gallery-img" alt="Screen">
                             <img src="./assets/joel/image 6.png" class="detail-gallery-img" alt="Screen">
                             <img src="./assets/joel/image 7.png" class="detail-gallery-img" alt="Screen">
-                            <img src="./assets/joel/image 8.png" class="detail-gallery-img" alt="Screen">
-                            <img src="./assets/joel/image 9.png" class="detail-gallery-img" alt="Screen">
-                            <img src="./assets/joel/image 10.png" class="detail-gallery-img" alt="Screen">
-                            <img src="./assets/joel/image 11.png" class="detail-gallery-img" alt="Screen">
-                            <img src="./assets/joel/image 12.png" class="detail-gallery-img" alt="Screen">
-                        </div>
-
-                        <div class="card-actions end-align">
-                            <button class="nav-btn btn-back-idle">Back</button>
-                            <button class="nav-btn next btn-next-content1">Next</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FACE 1: CONTENT PART 1 -->
-                <div class="card-face face-content-1">
-                    <div class="back-content">
-                        <div class="parallax-wrapper">
-                            <img src="./assets/joel/joel_mockup.jpeg" class="parallax-img" alt="Joel Hero 1">
-                        </div>
-                        <div class="text-content">
-                            <div class="scrollable-text">
-                                <h3>About App</h3>
-                                <p>Joel App distinguishes itself from standard gig-economy platforms by operating as a comprehensive, closed-loop service fulfillment ecosystem. It integrates pre-job logistics and a dynamic transaction state machine.</p>
-                                <p><strong>Client Procurement & Secure Transactions:</strong> Users seamlessly request specialized home services through the client-facing application, with upfront fee processing handled securely.</p>
-                                <p><strong>Smart Gig Dispatch:</strong> Service orders are dynamically broadcast to a network of qualified service partners. The decentralized dispatch system grants professionals autonomy to evaluate gigs.</p>
-                            </div>
-                            <div class="card-actions end-align">
-                                <button class="nav-btn btn-back-expanded">Back</button>
-                                <button class="nav-btn next btn-next-content2">Next</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FACE 2: CONTENT PART 2 -->
-                <div class="card-face face-content-2">
-                    <div class="back-content">
-                        <div class="parallax-wrapper">
-                            <img src="./assets/joel/joel_mockup2.jpeg" class="parallax-img" alt="Joel Hero 2">
-                        </div>
-                        <div class="text-content">
-                            <div class="scrollable-text">
-                                <h3>About App (Cont.)</h3>
-                                <p><strong>Pre-Job Logistics:</strong> Upon accepting a gig, the application acts as a logistical assistant, displaying a specific checklist of tools required. Integrated geolocation routes the partner directly.</p>
-                                <p><strong>Automated Invoicing:</strong> Following job completion, service providers trigger a system-generated invoice, automating payment release.</p>
-                                <p><strong>Dynamic Edge-Case Management:</strong> The platform is engineered to autonomously manage complex lifecycle events beyond the standard "happy path", with protocols for cancellations and price renegotiations.</p>
-                            </div>
-                            <div class="card-actions end-align">
-                                <button class="nav-btn btn-back-content1">Back</button>
-                                <button class="nav-btn next btn-next-final">Achievements</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FACE 3: FINAL -->
-                <div class="card-face face-final">
-                    <div class="final-content">
-                        <div class="role-contribution">
-                            <h3>Role and Contribution</h3>
-                            <p>Architected and deployed the Flutter monorepo using Melos. Developed a state-agnostic UI system using custom Flutter Hooks and Widgetbook.</p>
-                            <p>Built a dedicated statemanagement package <code>Effectum</code>. Implemented feature-level modular architecture, secured the backend via Firebase Auth SSO, and automated CI/CD pipelines via Fastlane and GitHub Actions to deliver the MVP in under 5 months.</p>
-                            <span class="duration-badge">Duration: Sept 2025 – Present</span>
-                        </div>
-                        <div class="links-grid">
-                            <a href="#" class="store-link">App Store</a>
-                            <a href="#" class="store-link">Play Store</a>
-                            <a href="#" class="store-link">GitHub</a>
                         </div>
                         <div class="card-actions spread-align">
-                            <button class="nav-btn btn-close-idle">Close</button>
-                            <button class="nav-btn btn-back-content2">Previous</button>
+                            <button class="nav-btn btn-back-idle">Close</button>
+                            <button class="nav-btn btn-flip-back">Inspect Architecture →</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-face face-back glass-panel">
+                    <div class="engineering-dashboard">
+                        <div class="dashboard-header">
+                            <h3>System Architecture</h3>
+                            <span class="duration-badge">Sept 2025 – Present</span>
+                        </div>
+                        <div class="dashboard-content scrollable-text">
+                            <div class="arch-section">
+                                <h5>Domain & Architecture</h5>
+                                <p>To manage complex transaction lifecycles without coupling UI to business logic, the system was built as a <strong>Flutter monorepo using Melos</strong>, enforcing strict feature-level modular boundaries.</p>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Implementation Decisions</h5>
+                                <ul>
+                                    <li><strong>State-Agnostic UI:</strong> Developed a decoupled UI system utilizing custom Flutter Hooks and Widgetbook for isolated testing.</li>
+                                    <li><strong>Custom State Management:</strong> Built a dedicated proprietary package (<code>Effectum</code>) to handle localized gig-lifecycle edge cases.</li>
+                                    <li><strong>Security:</strong> Backend integration secured strictly via Firebase Auth SSO.</li>
+                                </ul>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Outcomes & Delivery</h5>
+                                <p>By heavily investing in contract-first design, the MVP was successfully engineered, automated via Fastlane and GitHub Actions, and delivered to production in under 5 months.</p>
+                            </div>
+                        </div>
+                        <div class="dashboard-footer card-actions spread-align">
+                            <button class="nav-btn btn-flip-front">← Back to Context</button>
+                        <div class="links-row">
+    <button class="store-link">Request a Demo</button>
+</div>
                         </div>
                     </div>
                 </div>
@@ -123,17 +79,17 @@
         <!-- ========================================== -->
         <!-- PROJECT 2: LIFEBONDER                      -->
         <!-- ========================================== -->
-        <div class="project-card glass-panel fade-up" data-project="lifebonder">
+        <div class="project-card fade-up" data-project="lifebonder">
             <div class="card-inner">
-                <div class="card-face face-front">
+                <div class="card-face face-front glass-panel">
                     <div class="front-idle-content">
                         <div class="img-container">
                             <img class="project-cover" src="./assets/lifebonder/lifebonder_mock1.jpeg" alt="Lifebonder">
                         </div>
                         <div class="project-info">
                             <h4>Lifebonder</h4>
-                            <p>A cross-platform social networking application centered around privacy and WebRTC.</p>
-                            <button class="action-btn read-more-btn">Read More</button>
+                            <p>Cross-platform social network architecture prioritizing local-first data sync and WebRTC privacy.</p>
+                            <button class="action-btn read-more-btn">Explore Context</button>
                         </div>
                     </div>
                     <div class="front-expanded-content hidden">
@@ -143,59 +99,53 @@
                             <div class="carousel-indicators"></div>
                         </div>
                         <div class="project-info expanded-info">
-                            <h4>Lifebonder</h4>
-                            <p>A social networking application centered around privacy, featuring native WebRTC-based communication and group chats, redefining localized interactions through behavioral telemetry.</p>
+                            <h4>Mission & Constraints</h4>
+                            <p>Lifebonder required a highly responsive, privacy-centric communication platform. The technical constraint was maintaining UI fluidity while orchestrating heavy local database syncing, AI recommendation data telemetry, and end-to-end encrypted real-time video/chat pipelines across offline and online states.</p>
                         </div>
                         <div class="detail-gallery-container">
                             <img src="./assets/lifebonder/lifebonder_chat_groups.png" class="detail-gallery-img" alt="Screen">
                             <img src="./assets/lifebonder/lifebonder_chat2.png" class="detail-gallery-img" alt="Screen">
                             <img src="./assets/lifebonder/lifebonder_filter_location.png" class="detail-gallery-img" alt="Screen">
                             <img src="./assets/lifebonder/lifebonder_full_chat.png" class="detail-gallery-img" alt="Screen">
-                            <img src="./assets/lifebonder/lifebonder_invite.png" class="detail-gallery-img" alt="Screen">
                             <img src="./assets/lifebonder/lifebonder_login.png" class="detail-gallery-img" alt="Screen">
                         </div>
-                        <div class="card-actions end-align">
-                            <button class="nav-btn btn-back-idle">Back</button>
-                            <button class="nav-btn next btn-next-content1">Next</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-content-1">
-                    <div class="back-content">
-                        <div class="parallax-wrapper">
-                            <img src="./assets/lifebonder/lifebonder_mock1.jpeg" class="parallax-img" alt="Hero">
-                        </div>
-                        <div class="text-content">
-                            <div class="scrollable-text">
-                                <h3>About App</h3>
-                                <p><strong>Algorithmic Matchmaking:</strong> Intelligently connects users by analyzing shared interests, proximity, and real-world social events to foster organic relationship-building.</p>
-                                <p><strong>AI Recommendation Engine:</strong> Deeply integrates analytics by capturing session heat maps and screen time, feeding an AI that dynamically surfaces high-affinity group chats.</p>
-                                <p><strong>Encrypted WebRTC:</strong> Built on Agora and WebSockets, guaranteeing ultra-low latency P2P communication strictly governed by an end-to-end encrypted pipeline.</p>
-                            </div>
-                            <div class="card-actions end-align">
-                                <button class="nav-btn btn-back-expanded">Back</button>
-                                <button class="nav-btn next btn-next-final">Achievements</button> <!-- Skips C2 -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-final">
-                    <div class="final-content">
-                        <div class="role-contribution">
-                            <h3>Role and Contribution</h3>
-                            <p>Led architectural refactoring using Clean Architecture and DDD. Implemented advanced rate-limiting (debounce window) to balance REST API requests with local Hive DB calls.</p>
-                            <p>Consolidated multi-environment CI/CD pipelines and enhanced UI responsiveness across complex offline-first states.</p>
-                            <span class="duration-badge">Duration: May 2025 – Sept 2025</span>
-                        </div>
-                        <div class="links-grid">
-                            <a href="#" class="store-link">App Store</a>
-                            <a href="#" class="store-link">Play Store</a>
-                        </div>
                         <div class="card-actions spread-align">
-                            <button class="nav-btn btn-close-idle">Close</button>
-                            <button class="nav-btn btn-back-content1">Previous</button>
+                            <button class="nav-btn btn-back-idle">Close</button>
+                            <button class="nav-btn btn-flip-back">Inspect Architecture →</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-face face-back glass-panel">
+                    <div class="engineering-dashboard">
+                        <div class="dashboard-header">
+                            <h3>System Architecture</h3>
+                            <span class="duration-badge">May 2025 – Sept 2025</span>
+                        </div>
+                        <div class="dashboard-content scrollable-text">
+                            <div class="arch-section">
+                                <h5>Domain & Architecture</h5>
+                                <p>Led an architectural refactoring enforcing strict <strong>Clean Architecture and Domain-Driven Design</strong>. This decoupled the real-time communication protocols from the presentation layer.</p>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Implementation Decisions</h5>
+                                <ul>
+                                    <li><strong>Data Synchronization:</strong> Implemented advanced rate-limiting and debounce windows to orchestrate syncs between REST APIs and local <strong>Hive DB</strong> instances.</li>
+                                    <li><strong>Encrypted Pipelines:</strong> Built ultra-low latency P2P communication utilizing WebSockets and Agora WebRTC, strictly governed by end-to-end encryption.</li>
+                                    <li><strong>Telemetry:</strong> Integrated session heat maps feeding an AI recommendation engine without blocking the UI thread.</li>
+                                </ul>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Outcomes & Delivery</h5>
+                                <p>Significantly enhanced UI responsiveness during complex offline-first states and consolidated multi-environment CI/CD deployment pipelines.</p>
+                            </div>
+                        </div>
+                        <div class="dashboard-footer card-actions spread-align">
+                            <button class="nav-btn btn-flip-front">← Back to Context</button>
+                          <div class="links-row">
+    <a href="https://apps.apple.com/no/app/lifebonder-chat-messenger/id6478114984" target="_blank" rel="noopener noreferrer" class="store-link">App Store</a>
+    <a href="https://play.google.com/store/apps/dev?id=5924710520751341778" target="_blank" rel="noopener noreferrer" class="store-link">Play Store</a>
+    <a href="https://thehub.io/startups/lifebonder" target="_blank" rel="noopener noreferrer" class="store-link">Company</a>
+</div>
                         </div>
                     </div>
                 </div>
@@ -205,17 +155,17 @@
         <!-- ========================================== -->
         <!-- PROJECT 3: MUSHIR APP                      -->
         <!-- ========================================== -->
-        <div class="project-card glass-panel fade-up" data-project="mushir">
+        <div class="project-card fade-up" data-project="mushir">
             <div class="card-inner">
-                <div class="card-face face-front">
+                <div class="card-face face-front glass-panel">
                     <div class="front-idle-content">
                         <div class="img-container">
                             <img class="project-cover" src="./assets/mushir/mushir_mock1.jpeg" alt="Mushir App">
                         </div>
                         <div class="project-info">
                             <h4>Mushir App</h4>
-                            <p>A marketplace application selling partnered lawyer's legal services with real-time messaging.</p>
-                            <button class="action-btn read-more-btn">Read More</button>
+                            <p>Engineering a custom regional payment gateway package within an on-demand legal marketplace.</p>
+                            <button class="action-btn read-more-btn">Explore Context</button>
                         </div>
                     </div>
                     <div class="front-expanded-content hidden">
@@ -226,8 +176,8 @@
                             <div class="carousel-indicators"></div>
                         </div>
                         <div class="project-info expanded-info">
-                            <h4>Mushir App</h4>
-                            <p>Modernizes access to legal representation by establishing a curated, on-demand marketplace tailored exclusively for legal services, featuring online payment and secure SSO integration.</p>
+                            <h4>Mission & Constraints</h4>
+                            <p>Mushir modernizes access to legal representation via a curated marketplace. The critical engineering constraint was processing payments natively using ClickPay.sa, which completely lacked an official Android/iOS SDK plugin, alongside resolving severe structural flaws in the existing deep-linking and authentication systems.</p>
                         </div>
                         <div class="detail-gallery-container">
                             <img src="./assets/mushir/mushir_main.jpeg" class="detail-gallery-img" alt="Screen">
@@ -235,48 +185,41 @@
                             <img src="./assets/mushir/mushir2.jpeg" class="detail-gallery-img" alt="Screen">
                             <img src="./assets/mushir/mushir3.jpeg" class="detail-gallery-img" alt="Screen">
                         </div>
-                        <div class="card-actions end-align">
-                            <button class="nav-btn btn-back-idle">Back</button>
-                            <button class="nav-btn next btn-next-content1">Next</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-content-1">
-                    <div class="back-content">
-                        <div class="parallax-wrapper">
-                            <img src="./assets/mushir/mushir_mock2.jpeg" class="parallax-img" alt="Hero">
-                        </div>
-                        <div class="text-content">
-                            <div class="scrollable-text">
-                                <h3>About App</h3>
-                                <p><strong>Verified Profiles & Geolocation:</strong> Clients explore profiles detailing backgrounds and static office locations via map integration, empowering informed decisions while preserving privacy.</p>
-                                <p><strong>Custom Payment Engineering:</strong> Bypassing the lack of an Android/iOS plugin, a custom Flutter package was engineered to integrate ClickPay.sa via embedded WebViews, BLoC, and RxDart.</p>
-                                <p><strong>Advanced SSO & Deep Linking:</strong> Engineered robust Single Sign-On flow enhanced by complex routing directly to specific legal packages.</p>
-                            </div>
-                            <div class="card-actions end-align">
-                                <button class="nav-btn btn-back-expanded">Back</button>
-                                <button class="nav-btn next btn-next-final">Achievements</button> <!-- Skips C2 -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-final">
-                    <div class="final-content">
-                        <div class="role-contribution">
-                            <h3>Role and Contribution</h3>
-                            <p>Resolved critical authentication and deep-linking flaws. Built an SSO based auth leveraging advanced routing.</p>
-                            <p>Designed and integrated a custom payment gateway (ClickPay.sa) by creating a dedicated Flutter package utilizing BLoC, RxDart, and WebView integration, automating weekly payouts.</p>
-                            <span class="duration-badge">Duration: Aug 2024 – May 2025</span>
-                        </div>
-                        <div class="links-grid">
-                            <a href="#" class="store-link">App Store</a>
-                            <a href="#" class="store-link">Play Store</a>
-                        </div>
                         <div class="card-actions spread-align">
-                            <button class="nav-btn btn-close-idle">Close</button>
-                            <button class="nav-btn btn-back-content1">Previous</button>
+                            <button class="nav-btn btn-back-idle">Close</button>
+                            <button class="nav-btn btn-flip-back">Inspect Architecture →</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-face face-back glass-panel">
+                    <div class="engineering-dashboard">
+                        <div class="dashboard-header">
+                            <h3>System Architecture</h3>
+                            <span class="duration-badge">Aug 2024 – May 2025</span>
+                        </div>
+                        <div class="dashboard-content scrollable-text">
+                            <div class="arch-section">
+                                <h5>Domain & Architecture</h5>
+                                <p>The system acts as a secure intermediary for legal counsel. Re-engineered the routing architecture to handle complex SSO flows and specific legal-package deep links seamlessly across states.</p>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Implementation Decisions</h5>
+                                <ul>
+                                    <li><strong>Custom Payment Engine:</strong> Bypassed the missing SDK by engineering a dedicated Flutter package integrating ClickPay.sa via embedded WebViews, governed by <strong>BLoC and RxDart</strong>.</li>
+                                    <li><strong>State Safety:</strong> Rebuilt the authentication flow to eliminate race conditions during SSO callbacks and deep link interceptions.</li>
+                                    <li><strong>Geolocation:</strong> Implemented map integration for static office locations while preserving client privacy boundaries.</li>
+                                </ul>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Outcomes & Delivery</h5>
+                                <p>Successfully deployed the bespoke payment package, automating weekly payouts and fully resolving critical authentication and routing flaws preventing app launch.</p>
+                            </div>
+                        </div>
+                        <div class="dashboard-footer card-actions spread-align">
+                            <button class="nav-btn btn-flip-front">← Back to Context</button>
+                          <div class="links-row">
+    <button class="store-link">Request a Demo</button>
+</div>
                         </div>
                     </div>
                 </div>
@@ -284,19 +227,19 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- PROJECT 4: ELECTRICAL CONCENTRATORS      -->
+        <!-- PROJECT 4: ELECTRICAL CONCENTRATORS (GSP)  -->
         <!-- ========================================== -->
-        <div class="project-card glass-panel fade-up" data-project="gsp">
+        <div class="project-card fade-up" data-project="gsp">
             <div class="card-inner">
-                <div class="card-face face-front">
+                <div class="card-face face-front glass-panel">
                     <div class="front-idle-content">
                         <div class="img-container">
-                            <img class="project-cover" src="./assets/gsp/Modernizing_design_2K_202608181337.jpeg" alt="Electrical Concentrators Maintenance">
+                            <img class="project-cover" src="./assets/gsp/Modernizing_design_2K_202608181337.jpeg" alt="GSP App">
                         </div>
                         <div class="project-info">
-                            <h4>Electrical Concentrators Maintenance</h4>
-                            <p>A Flutter desktop business application dedicated to the maintenance of IoT electrical concentrators.</p>
-                            <button class="action-btn read-more-btn">Read More</button>
+                            <h4>Electrical Concentrators</h4>
+                            <p>Multi-window IoT desktop architecture rendering high-density real-time MQTT telemetry.</p>
+                            <button class="action-btn read-more-btn">Explore Context</button>
                         </div>
                     </div>
                     <div class="front-expanded-content hidden">
@@ -305,72 +248,47 @@
                             <div class="carousel-indicators"></div>
                         </div>
                         <div class="project-info expanded-info">
-                            <h4>Electrical Concentrators Maintenance</h4>
-                            <p>Enterprise Industrial IoT Maintenance Workstation engineered specifically for electrical utility technicians and grid engineers, delivering high-density real-time telemetry.</p>
+                            <h4>Mission & Constraints</h4>
+                            <p>An Enterprise Industrial IoT Maintenance Workstation for utility grid engineers. The constraint was rendering live, high-frequency telemetry (voltage, current, active power) for hundreds of connected meters concurrently across multiple detached floating desktop windows without triggering race conditions or UI thread locks.</p>
                         </div>
                         <div class="detail-gallery-container">
                             <img src="./assets/gsp/Modernizing_design_2K_202608181337.jpeg" class="detail-gallery-img" alt="Screen">
                         </div>
-                        <div class="card-actions end-align">
-                            <button class="nav-btn btn-back-idle">Back</button>
-                            <button class="nav-btn next btn-next-content1">Next</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-content-1">
-                    <div class="back-content">
-                        <div class="parallax-wrapper">
-                            <img src="./assets/gsp/Modernizing_design_2K_202608181337.jpeg" class="parallax-img" alt="Hero">
-                        </div>
-                        <div class="text-content">
-                            <div class="scrollable-text">
-                                <h3>About App</h3>
-                                <p><strong>Multi-Session Desktop Architecture:</strong> Employs a sophisticated layout with a central command hub orchestrating multiple detached floating windows for independent grid node sessions.</p>
-                                <p><strong>Real-Time MQTT Telemetry:</strong> Consumes live streams of device data via integrated MQTT broker, displaying heartbeats and communication statistics with extreme precision.</p>
-                                <p><strong>Protocol-Level Command Panel:</strong> Engineering-focused command execution grid designed for direct device intervention and parameter configuration without visual clutter.</p>
-                            </div>
-                            <div class="card-actions end-align">
-                                <button class="nav-btn btn-back-expanded">Back</button>
-                                <button class="nav-btn next btn-next-content2">Next</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-content-2">
-                    <div class="back-content">
-                        <div class="parallax-wrapper">
-                            <img src="./assets/gsp/Modernizing_design_2K_202608181337.jpeg" class="parallax-img" alt="Hero">
-                        </div>
-                        <div class="text-content">
-                            <div class="scrollable-text">
-                                <h3>About App (Cont.)</h3>
-                                <p><strong>High-Density Data Visualization:</strong> Utilizes high-performance data grids to render complex tabular data for hundreds of connected meters (active power, current, voltage).</p>
-                                <p><strong>Diagnostic & Export Modules:</strong> Aggregates metadata and communication errors into diagnostic views with robust CSV and Excel export tools.</p>
-                            </div>
-                            <div class="card-actions end-align">
-                                <button class="nav-btn btn-back-content1">Back</button>
-                                <button class="nav-btn next btn-next-final">Achievements</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-final">
-                    <div class="final-content">
-                        <div class="role-contribution">
-                            <h3>Role and Contribution</h3>
-                            <p>Overhauled multi-window desktop architecture integrating flutter-windows-multi-window. Developed custom C++ implementations to eliminate race conditions with native Windows APIs.</p>
-                            <p>Architected inter-window state management and optimized MQTT client architecture for heavy data streaming. Modified Syncfusion DataGrid for smooth real-time updates.</p>
-                            <span class="duration-badge">Duration: May 2024 – Aug 2024</span>
-                        </div>
-                        <div class="links-grid">
-                            <a href="#" class="store-link">GitHub</a>
-                        </div>
                         <div class="card-actions spread-align">
-                            <button class="nav-btn btn-close-idle">Close</button>
-                            <button class="nav-btn btn-back-content2">Previous</button>
+                            <button class="nav-btn btn-back-idle">Close</button>
+                            <button class="nav-btn btn-flip-back">Inspect Architecture →</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-face face-back glass-panel">
+                    <div class="engineering-dashboard">
+                        <div class="dashboard-header">
+                            <h3>System Architecture</h3>
+                            <span class="duration-badge">May 2024 – Aug 2024</span>
+                        </div>
+                        <div class="dashboard-content scrollable-text">
+                            <div class="arch-section">
+                                <h5>Domain & Architecture</h5>
+                                <p>Engineered a multi-session desktop architecture using a central command hub that orchestrates detached floating windows, allowing engineers to manage independent grid node sessions simultaneously.</p>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Implementation Decisions</h5>
+                                <ul>
+                                    <li><strong>Native API Integration:</strong> Developed custom C++ implementations to bridge Flutter with native Windows APIs, eliminating multi-threading race conditions.</li>
+                                    <li><strong>Real-Time MQTT:</strong> Architected a high-throughput MQTT client capable of consuming and parsing massive live data streams with extreme precision.</li>
+                                    <li><strong>Render Optimization:</strong> Modified Syncfusion DataGrids to handle high-density tabular rendering without dropping frames during data injection.</li>
+                                </ul>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Outcomes & Delivery</h5>
+                                <p>Delivered a highly stable, protocol-level command execution grid for direct IoT device intervention, alongside robust diagnostic CSV/Excel export tools.</p>
+                            </div>
+                        </div>
+                        <div class="dashboard-footer card-actions spread-align">
+                            <button class="nav-btn btn-flip-front">← Back to Context</button>
+                         <div class="links-row">
+    <a href="https://babelgroup.com/en/" target="_blank" rel="noopener noreferrer" class="store-link">Company</a>
+</div>
                         </div>
                     </div>
                 </div>
@@ -380,29 +298,28 @@
         <!-- ========================================== -->
         <!-- PROJECT 5: XCITE IMMO APP                  -->
         <!-- ========================================== -->
-        <div class="project-card glass-panel fade-up" data-project="xcite">
+        <div class="project-card fade-up" data-project="xcite">
             <div class="card-inner">
-                <div class="card-face face-front">
+                <div class="card-face face-front glass-panel">
                     <div class="front-idle-content">
                         <div class="img-container">
-                            <img class="project-cover" src="./assets/xcite/xcite_mock.jpeg" alt="Xcite Immo App">
+                            <img class="project-cover" src="./assets/xcite/xcite_mock.jpeg" alt="Xcite Immo">
                         </div>
                         <div class="project-info">
-                            <h4>Xcite Immo App</h4>
-                            <p>A B2B real estate application tailored to the regulatory requirements of the German real estate industry.</p>
-                            <button class="action-btn read-more-btn">Read More</button>
+                            <h4>Xcite Immo</h4>
+                            <p>Multi-tenant SaaS real estate ERP utilizing complex offline-first database synchronization.</p>
+                            <button class="action-btn read-more-btn">Explore Context</button>
                         </div>
                     </div>
                     <div class="front-expanded-content hidden">
                         <div class="carousel-container">
                             <div class="carousel-slide active"><img src="./assets/xcite/xcite_mock.jpeg" alt="Slide 1"></div>
                             <div class="carousel-slide"><img src="./assets/xcite/unnamed (6).webp" alt="Slide 2"></div>
-                            <div class="carousel-slide"><img src="./assets/xcite/unnamed (7).webp" alt="Slide 3"></div>
                             <div class="carousel-indicators"></div>
                         </div>
                         <div class="project-info expanded-info">
-                            <h4>Xcite Immo App</h4>
-                            <p>A multi-tenant SaaS ERP engineered for the highly regulated real estate management sector, pairing an offline-first architecture with an automated contract generation engine.</p>
+                            <h4>Mission & Constraints</h4>
+                            <p>A B2B SaaS platform for the highly regulated German real estate industry. The system demanded a multi-tenant cloud architecture that could securely silo agency data, but crucially had to function entirely offline in zero-connectivity building sites, requiring autonomous database conflict resolution upon network restoration.</p>
                         </div>
                         <div class="detail-gallery-container">
                             <img src="./assets/xcite/unnamed (2).webp" class="detail-gallery-img" alt="Screen">
@@ -410,66 +327,43 @@
                             <img src="./assets/xcite/unnamed (4).webp" class="detail-gallery-img" alt="Screen">
                             <img src="./assets/xcite/unnamed (5).webp" class="detail-gallery-img" alt="Screen">
                         </div>
-                        <div class="card-actions end-align">
-                            <button class="nav-btn btn-back-idle">Back</button>
-                            <button class="nav-btn next btn-next-content1">Next</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-content-1">
-                    <div class="back-content">
-                        <div class="parallax-wrapper">
-                            <img src="./assets/xcite/xcite_mock.jpeg" class="parallax-img" alt="Hero">
-                        </div>
-                        <div class="text-content">
-                            <div class="scrollable-text">
-                                <h3>About App</h3>
-                                <p><strong>Multi-Tenant SaaS Architecture:</strong> Scalable B2B platform allowing agencies to onboard teams and silo client data within shared cloud ecosystems while maintaining local databases.</p>
-                                <p><strong>Automated Contract Engine:</strong> Digitizes complex workflows, provisioning rental agreements and utility setups via regional partnerships and asynchronous cron jobs.</p>
-                                <p><strong>Robust Offline-First Sync:</strong> Built to operate in zero-connectivity sites; autonomously resolves conflicts and syncs with Firebase Firestore upon network restoration.</p>
-                            </div>
-                            <div class="card-actions end-align">
-                                <button class="nav-btn btn-back-expanded">Back</button>
-                                <button class="nav-btn next btn-next-content2">Next</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-content-2">
-                    <div class="back-content">
-                        <div class="parallax-wrapper">
-                            <img src="./assets/xcite/unnamed (6).webp" class="parallax-img" alt="Hero">
-                        </div>
-                        <div class="text-content">
-                            <div class="scrollable-text">
-                                <h3>About App (Cont.)</h3>
-                                <p><strong>Advanced Data Portability:</strong> Specialized diagnostic tools allow agency teams to export local databases and handover session control for rapid troubleshooting.</p>
-                            </div>
-                            <div class="card-actions end-align">
-                                <button class="nav-btn btn-back-content1">Back</button>
-                                <button class="nav-btn next btn-next-final">Achievements</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-final">
-                    <div class="final-content">
-                        <div class="role-contribution">
-                            <h3>Role and Contribution</h3>
-                            <p>Directed the complete mobile engineering lifecycle and enforced strict architectural standards via rigorous weekly code reviews.</p>
-                            <p>Architecturally redesigned the synchronization engine bridging SQLite/Hive with multi-tenant Firestore and developed a custom end-to-end autocomplete engine to accelerate data entry.</p>
-                            <span class="duration-badge">Duration: Oct 2023 – May 2024</span>
-                        </div>
-                        <div class="links-grid">
-                            <a href="#" class="store-link">App Store</a>
-                            <a href="#" class="store-link">Play Store</a>
-                        </div>
                         <div class="card-actions spread-align">
-                            <button class="nav-btn btn-close-idle">Close</button>
-                            <button class="nav-btn btn-back-content2">Previous</button>
+                            <button class="nav-btn btn-back-idle">Close</button>
+                            <button class="nav-btn btn-flip-back">Inspect Architecture →</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-face face-back glass-panel">
+                    <div class="engineering-dashboard">
+                        <div class="dashboard-header">
+                            <h3>System Architecture</h3>
+                            <span class="duration-badge">Oct 2023 – May 2024</span>
+                        </div>
+                        <div class="dashboard-content scrollable-text">
+                            <div class="arch-section">
+                                <h5>Domain & Architecture</h5>
+                                <p>Architecturally redesigned the synchronization engine to bridge local SQLite/Hive databases with a multi-tenant Firebase Firestore cloud infrastructure.</p>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Implementation Decisions</h5>
+                                <ul>
+                                    <li><strong>Automated Contracts:</strong> Digitized complex workflows to provision rental agreements and utility setups via asynchronous cron jobs.</li>
+                                    <li><strong>Data Portability:</strong> Engineered specialized diagnostic tools allowing agencies to export local databases and handover session control for rapid troubleshooting.</li>
+                                    <li><strong>Custom Autocomplete:</strong> Built a custom end-to-end autocomplete engine to dramatically accelerate field data entry.</li>
+                                </ul>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Outcomes & Delivery</h5>
+                                <p>Directed the complete mobile engineering lifecycle, enforcing strict architectural standards via rigorous code reviews and delivering a highly resilient offline-first application.</p>
+                            </div>
+                        </div>
+                        <div class="dashboard-footer card-actions spread-align">
+                            <button class="nav-btn btn-flip-front">← Back to Context</button>
+                          <div class="links-row">
+    <a href="https://apps.apple.com/tn/app/x-cite-immo/id1629711972" target="_blank" rel="noopener noreferrer" class="store-link">App Store</a>
+    <a href="https://play.google.com/store/apps/details?id=glocal.xcite.flutter&hl=fr" target="_blank" rel="noopener noreferrer" class="store-link">Play Store</a>
+    <a href="https://x-cite-app.de/" target="_blank" rel="noopener noreferrer" class="store-link">Company</a>
+</div>
                         </div>
                     </div>
                 </div>
@@ -477,34 +371,30 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- PROJECT 6: TOLLHOPPER APP                   -->
+        <!-- PROJECT 6: TOLLHOPPER APP                  -->
         <!-- ========================================== -->
-        <div class="project-card glass-panel fade-up" data-project="tollhopper">
+        <div class="project-card fade-up" data-project="tollhopper">
             <div class="card-inner">
-                <div class="card-face face-front">
+                <div class="card-face face-front glass-panel">
                     <div class="front-idle-content">
                         <div class="img-container">
-                            <img class="project-cover" src="./assets/tollhopper/Tollhopper_mock1.jpeg" alt="TollHopper App">
+                            <img class="project-cover" src="./assets/tollhopper/Tollhopper_mock1.jpeg" alt="TollHopper">
                         </div>
                         <div class="project-info">
-                            <h4>TollHopper App</h4>
-                            <p>A mobile application facilitating seamless European vignette sales with integrated secure payments.</p>
-                            <button class="action-btn read-more-btn">Read More</button>
+                            <h4>TollHopper</h4>
+                            <p>Smart mapping and dynamic pricing engine for a Pan-European digital vignette marketplace.</p>
+                            <button class="action-btn read-more-btn">Explore Context</button>
                         </div>
                     </div>
                     <div class="front-expanded-content hidden">
                         <div class="carousel-container">
-                            <div class="carousel-slide active">
-                                <img src="./assets/tollhopper/Tollhopper_mock1.jpeg" alt="Slide 1">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="./assets/tollhopper/Tollhopper_mock2.jpeg" alt="Slide 2">
-                            </div>
+                            <div class="carousel-slide active"><img src="./assets/tollhopper/Tollhopper_mock1.jpeg" alt="Slide 1"></div>
+                            <div class="carousel-slide"><img src="./assets/tollhopper/Tollhopper_mock2.jpeg" alt="Slide 2"></div>
                             <div class="carousel-indicators"></div>
                         </div>
                         <div class="project-info expanded-info">
-                            <h4>TollHopper App</h4>
-                            <p>Modernizes cross-border European travel by replacing fragmented vignette purchasing with an intelligent mobile utility featuring interactive mapping and smart route calculation.</p>
+                            <h4>Mission & Constraints</h4>
+                            <p>TollHopper modernizes cross-border European travel by replacing fragmented physical vignette purchasing. The engineering required integrating geospatial routing APIs to dynamically calculate toll jurisdictions, aggregating complex pricing models, and securely processing multi-currency financial transactions across various European compliance zones.</p>
                         </div>
                         <div class="detail-gallery-container">
                             <img src="./assets/tollhopper/image_original (23).jpeg" class="detail-gallery-img" alt="Screen">
@@ -512,66 +402,41 @@
                             <img src="./assets/tollhopper/image_original2.jpeg" class="detail-gallery-img" alt="Screen">
                             <img src="./assets/tollhopper/image_original3.jpeg" class="detail-gallery-img" alt="Screen">
                         </div>
-                        <div class="card-actions end-align">
-                            <button class="nav-btn btn-back-idle">Back</button>
-                            <button class="nav-btn next btn-next-content1">Next</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-content-1">
-                    <div class="back-content">
-                        <div class="parallax-wrapper">
-                            <img src="./assets/tollhopper/Tollhopper_mock1.jpeg" class="parallax-img" alt="Hero">
-                        </div>
-                        <div class="text-content">
-                            <div class="scrollable-text">
-                                <h3>About App</h3>
-                                <p><strong>Smart Routing & Toll Calculator:</strong> Integrates mapping and distance data to dynamically calculate journey requirements, pinpointing required regional vignettes.</p>
-                                <p><strong>Dynamic Pricing Engine:</strong> Automatically aggregates and displays localized pricing based on calculated routes and travel parameters.</p>
-                                <p><strong>Pan-European Marketplace:</strong> Centralized digital storefront for purchasing highway vignettes across multiple jurisdictions, eliminating physical border kiosks.</p>
-                            </div>
-                            <div class="card-actions end-align">
-                                <button class="nav-btn btn-back-expanded">Back</button>
-                                <button class="nav-btn next btn-next-content2">Next</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-content-2">
-                    <div class="back-content">
-                        <div class="parallax-wrapper">
-                            <img src="./assets/tollhopper/Tollhopper_mock2.jpeg" class="parallax-img" alt="Hero">
-                        </div>
-                        <div class="text-content">
-                            <div class="scrollable-text">
-                                <h3>About App (Cont.)</h3>
-                                <p><strong>Secure Omni-Channel Payments:</strong> Facilitates seamless localized digital checkouts offering multiple trusted payment methods, including Stripe and PayPal.</p>
-                            </div>
-                            <div class="card-actions end-align">
-                                <button class="nav-btn btn-back-content1">Back</button>
-                                <button class="nav-btn next btn-next-final">Achievements</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-final">
-                    <div class="final-content">
-                        <div class="role-contribution">
-                            <h3>Role and Contribution</h3>
-                            <p>Led end-to-end development of the mobile application, architecting and building the entire TollHopper mobile platform from scratch.</p>
-                            <p>Spearheaded the complex integration of secure financial transaction pipelines, successfully embedding both Stripe and PayPal for compliant European vignette sales.</p>
-                            <span class="duration-badge">Duration: Oct 2023 – May 2024</span>
-                        </div>
-                        <div class="links-grid">
-                            <a href="#" class="store-link">App Store</a>
-                            <a href="#" class="store-link">Play Store</a>
-                        </div>
                         <div class="card-actions spread-align">
-                            <button class="nav-btn btn-close-idle">Close</button>
-                            <button class="nav-btn btn-back-content2">Previous</button>
+                            <button class="nav-btn btn-back-idle">Close</button>
+                            <button class="nav-btn btn-flip-back">Inspect Architecture →</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-face face-back glass-panel">
+                    <div class="engineering-dashboard">
+                        <div class="dashboard-header">
+                            <h3>System Architecture</h3>
+                            <span class="duration-badge">Oct 2023 – May 2024</span>
+                        </div>
+                        <div class="dashboard-content scrollable-text">
+                            <div class="arch-section">
+                                <h5>Domain & Architecture</h5>
+                                <p>Led end-to-end development of the platform, constructing a centralized digital storefront anchored by an intelligent route-calculation domain model.</p>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Implementation Decisions</h5>
+                                <ul>
+                                    <li><strong>Smart Routing:</strong> Integrated robust mapping APIs to dynamically calculate journey requirements and pinpoint required regional vignettes.</li>
+                                    <li><strong>Dynamic Pricing Engine:</strong> Automatically aggregates and displays localized pricing based on distance calculations and travel parameters.</li>
+                                    <li><strong>Financial Pipeline:</strong> Spearheaded the complex integration of secure omni-channel payments (Stripe, PayPal) ensuring compliance with European sales standards.</li>
+                                </ul>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Outcomes & Delivery</h5>
+                                <p>Successfully architected and launched a fully compliant, highly interactive mobile utility from scratch, eliminating physical border kiosk friction for users.</p>
+                            </div>
+                        </div>
+                        <div class="dashboard-footer card-actions spread-align">
+                            <button class="nav-btn btn-flip-front">← Back to Context</button>
+                         <div class="links-row">
+    <a href="https://tollhopper.com/?srsltid=AfmBOopoGXpcquv3LBio6E1VK7n4CXTfM0mSS9lJUJbkOZxEJwdhQib-" target="_blank" rel="noopener noreferrer" class="store-link">Company</a>
+</div>
                         </div>
                     </div>
                 </div>
@@ -579,39 +444,31 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- PROJECT 7: GEARNI MARKETPLACE               -->
+        <!-- PROJECT 7: GEARNI MARKETPLACE              -->
         <!-- ========================================== -->
-        <div class="project-card glass-panel fade-up" data-project="gearni">
+        <div class="project-card fade-up" data-project="gearni">
             <div class="card-inner">
-                <div class="card-face face-front">
+                <div class="card-face face-front glass-panel">
                     <div class="front-idle-content">
                         <div class="img-container">
                             <img class="project-cover" src="./assets/gearni/gearni_mock1.jpeg" alt="Gearni">
                         </div>
                         <div class="project-info">
                             <h4>Gearni</h4>
-                            <p>A comprehensive e-commerce marketplace platform built on a modernized tech stack.</p>
-                            <button class="action-btn read-more-btn">Read More</button>
+                            <p>Omni-channel B2B2C e-commerce platform orchestrating web, mobile apps, and NestJS microservices.</p>
+                            <button class="action-btn read-more-btn">Explore Context</button>
                         </div>
                     </div>
                     <div class="front-expanded-content hidden">
                         <div class="carousel-container">
-                            <div class="carousel-slide active">
-                                <img src="./assets/gearni/gearni_mock1.jpeg" alt="Slide 1">
-                            </div>
-                                
-                                <div class="carousel-slide">
-                                 <img src="./assets/gearni/gearni_mock2.jpeg" alt="Slide 2">
-                                </div>
-                                <div class="carousel-slide">
-                                <img src="./assets/gearni/gearni_mock3.jpeg" alt="Slide 3">
-                            </div>
-                                <div class="carousel-indicators"></div>
-    
+                            <div class="carousel-slide active"><img src="./assets/gearni/gearni_mock1.jpeg" alt="Slide 1"></div>
+                            <div class="carousel-slide"><img src="./assets/gearni/gearni_mock2.jpeg" alt="Slide 2"></div>
+                            <div class="carousel-slide"><img src="./assets/gearni/gearni_mock3.jpeg" alt="Slide 3"></div>
+                            <div class="carousel-indicators"></div>
                         </div>
-                        <div class="project-info expanded-info">  
-                            <h4>Gearni</h4>
-                            <p>Bridges the gap between auto parts suppliers and vehicle owners through a specialized omni-channel B2B2C platform anchored around registered vehicle models.</p>
+                        <div class="project-info expanded-info">
+                            <h4>Mission & Constraints</h4>
+                            <p>Gearni is a specialized automotive marketplace bridging auto parts suppliers and vehicle owners. The complexity lay in synchronizing data across an expansive omni-channel ecosystem (a consumer retail app, a vendor shop app, and a web platform), requiring robust vehicle-centric search algorithms and unified identity management.</p>
                         </div>
                         <div class="detail-gallery-container">
                             <img src="./assets/gearni/gearni1.jpeg" class="detail-gallery-img" alt="Screen">
@@ -620,76 +477,48 @@
                             <img src="./assets/gearni/gearni5.jpeg" class="detail-gallery-img" alt="Screen">
                             <img src="./assets/gearni/gearni7.jpeg" class="detail-gallery-img" alt="Screen">
                             <img src="./assets/gearni/gearni8.jpeg" class="detail-gallery-img" alt="Screen">
-                            <img src="./assets/gearni/gearni9.jpeg" class="detail-gallery-img" alt="Screen">
-                            <img src="./assets/gearni/gearni10.jpeg" class="detail-gallery-img" alt="Screen">
-                            <img src="./assets/gearni/gearni11.jpeg" class="detail-gallery-img" alt="Screen">
-                        </div>
-                        <div class="card-actions end-align">
-                            <button class="nav-btn btn-back-idle">Back</button>
-                            <button class="nav-btn next btn-next-content1">Next</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-content-1">
-                    <div class="back-content">
-                        <div class="parallax-wrapper">
-                            <img src="./assets/gearni/gearni_mock2.jpeg" class="parallax-img" alt="Hero">
-                        </div>
-                        <div class="text-content">
-                            <div class="scrollable-text">
-                                <h3>About App</h3>
-                                <p><strong>Omni-Channel Ecosystem:</strong> Operates via synchronized apps for unique journeys—consumer retail app, dedicated vendor "Shop" app, and a comprehensive web platform.</p>
-                                <p><strong>Vehicle-Centric Discovery:</strong> Allows customers to register specific car models, enabling a precise search engine to explore and order compatible auto parts.</p>
-                                <p><strong>Vendor Management:</strong> Empowers sellers to digitize operations, managing inventory variations and responding to customer quote requests in real time.</p>
-                            </div>
-                            <div class="card-actions end-align">
-                                <button class="nav-btn btn-back-expanded">Back</button>
-                                <button class="nav-btn next btn-next-content2">Next</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-content-2">
-                    <div class="back-content">
-                        <div class="parallax-wrapper">
-                            <img src="./assets/gearni/gearni_mock3.jpeg" class="parallax-img" alt="Hero">
-                        </div>
-                        <div class="text-content">
-                            <div class="scrollable-text">
-                                <h3>About App (Cont.)</h3>
-                                <p><strong>Identity & Payments:</strong> Integrated online payment gateways for frictionless checkouts, backed by an enterprise-grade SSO identity system utilizing Auth0.</p>
-                            </div>
-                            <div class="card-actions end-align">
-                                <button class="nav-btn btn-back-content1">Back</button>
-                                <button class="nav-btn next btn-next-final">Achievements</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-face face-final">
-                    <div class="final-content">
-                        <div class="role-contribution">
-                            <h3>Role and Contribution</h3>
-                            <p>Directed the complete product lifecycle to rebuild the marketplace. Built the web app using AngularJS, concurrent mobile apps with Flutter, and led backend engineering with NestJS.</p>
-                            <p>Introduced TDD workflows and DDD architecture. Integrated Zoho CRM API for automated workflows and implemented Auth0 SSO across the ecosystem. Orchestrated CI/CD via Jenkins.</p>
-                            <span class="duration-badge">Duration: Aug 2022 – Sept 2023</span>
-                        </div>
-                        <div class="links-grid">
-                            <a href="#" class="store-link">App Store</a>
-                            <a href="#" class="store-link">Play Store</a>
-                            <a href="#" class="store-link">GitHub</a>
                         </div>
                         <div class="card-actions spread-align">
-                            <button class="nav-btn btn-close-idle">Close</button>
-                            <button class="nav-btn btn-back-content2">Previous</button>
+                            <button class="nav-btn btn-back-idle">Close</button>
+                            <button class="nav-btn btn-flip-back">Inspect Architecture →</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-face face-back glass-panel">
+                    <div class="engineering-dashboard">
+                        <div class="dashboard-header">
+                            <h3>System Architecture</h3>
+                            <span class="duration-badge">Aug 2022 – Sept 2023</span>
+                        </div>
+                        <div class="dashboard-content scrollable-text">
+                            <div class="arch-section">
+                                <h5>Domain & Architecture</h5>
+                                <p>Directed the complete product rebuild utilizing <strong>Domain-Driven Design (DDD)</strong>. Built the web app using AngularJS, concurrent mobile apps with Flutter, and led backend engineering via <strong>NestJS</strong> microservices.</p>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Implementation Decisions</h5>
+                                <ul>
+                                    <li><strong>Quality Assurance:</strong> Introduced rigorous TDD workflows and orchestrated automated CI/CD pipelines via Jenkins.</li>
+                                    <li><strong>Identity & Operations:</strong> Implemented enterprise-grade SSO identity across the ecosystem utilizing Auth0, and integrated Zoho CRM APIs for automated vendor workflows.</li>
+                                    <li><strong>Discovery Engine:</strong> Built a precise search engine anchored around registered vehicle model compatibility.</li>
+                                </ul>
+                            </div>
+                            <div class="arch-section">
+                                <h5>Outcomes & Delivery</h5>
+                                <p>Successfully unified a fragmented ecosystem into a modernized, highly scalable B2B2C tech stack capable of handling real-time vendor inventory and customer quote requests.</p>
+                            </div>
+                        </div>
+                        <div class="dashboard-footer card-actions spread-align">
+                            <button class="nav-btn btn-flip-front">← Back to Context</button>
+                          <div class="links-row">
+    <a href="https://terrific.ventures/" target="_blank" rel="noopener noreferrer" class="store-link">Company</a>
+</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- End of Gearni Marketplace -->
 
-       
+    </div>
 </section>

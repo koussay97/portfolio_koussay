@@ -1,21 +1,110 @@
 <section id="tech">
-    <h2 class="section-header fade-up">Intelligence Stack</h2>
-    <div class="tech-grid">
-        <div class="tech-card fade-up">
-            <h4>Flutter & Dart</h4>
-            <p>Native-tier performance across platforms. Advanced state management and custom render objects.</p>
+    <h2 class="section-header fade-up">System Capabilities</h2>
+    
+    <div class="tech-accordion fade-up">
+        
+        <!-- Pillar 1: Core Engineering -->
+        <div class="tech-module glass-panel">
+            <div class="tech-module-header">
+                <h3>Core Engineering Principles</h3>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="tech-module-content">
+                <div class="tech-module-inner">
+                    <p class="philosophy">Systems are designed around Domain-Driven Design (DDD) to establish ubiquitous language and clear boundaries. I strictly enforce the principle of making illegal states unrepresentable through Value Objects and rigid type systems.</p>
+                    <div class="ecosystem">
+                        <strong>Architecture:</strong> Ports and Adapters (Hexagonal), Event-Driven Systems (CQRS).<br>
+                        <strong>Paradigms:</strong> Functional Programming, SOLID Principles, Dependency Injection.
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="tech-card fade-up">
-            <h4>NestJS & Python</h4>
-            <p>Scalable microservices, asynchronous data processing, and highly organized backend architecture.</p>
+
+        <!-- Pillar 2: Mobile Engineering -->
+        <div class="tech-module glass-panel">
+            <div class="tech-module-header">
+                <h3>Mobile Systems Engineering</h3>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="tech-module-content">
+                <div class="tech-module-inner">
+                    <p class="philosophy">Mobile applications are treated as highly reactive edge nodes. I champion offline-first architectures and decoupled UI layers to ensure "write once, execute anywhere" without sacrificing native fidelity.</p>
+                    <div class="ecosystem">
+                        <strong>Ecosystem:</strong> Flutter, Dart.<br>
+                        <strong>Mechanics:</strong> BLoC, RxDart, FFI (ffigen), Custom Shaders, Platform-specific channels, Package Development.
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="tech-card fade-up">
-            <h4>CI/CD & DevOps</h4>
-            <p>Docker containerization, Fastlane automation, and seamless deployment pipelines.</p>
+
+        <!-- Pillar 3: Backend & AI -->
+        <div class="tech-module glass-panel">
+            <div class="tech-module-header">
+                <h3>Backend & AI Infrastructure</h3>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="tech-module-content">
+                <div class="tech-module-inner">
+                    <p class="philosophy">Backend services are engineered with uncompromising static typing and data validation. AI integration is treated as a modular capability within the system architecture, not a separate black box.</p>
+                    <div class="ecosystem">
+                        <strong>Core:</strong> Python, FastAPI, Pydantic (Strict typing).<br>
+                        <strong>Data:</strong> PostgreSQL, MongoDB, SQLAlchemy, Alembic.<br>
+                        <strong>AI & Auth:</strong> LangGraph, LangChain, Auth0 (SSO), Firebase Suite, Appwrite.
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="tech-card fade-up">
-            <h4>Monorepo</h4>
-            <p>Melos & Nx workspace orchestration for optimized code sharing and package modularity.</p>
+
+        <!-- Pillar 4: CI/CD -->
+        <div class="tech-module glass-panel">
+            <div class="tech-module-header">
+                <h3>CI/CD & Orchestration</h3>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="tech-module-content">
+                <div class="tech-module-inner">
+                    <p class="philosophy">Delivery pipelines must be layered, reproducible, and agnostic to avoid vendor lock-in. Environments are orchestrated via scripts that execute identically on local machines and remote runners.</p>
+                    <div class="ecosystem">
+                        <strong>Orchestration:</strong> Monorepo configurations, Melos (Dart & Non-Dart), Nx.<br>
+                        <strong>Automation:</strong> Fastlane, Docker, GitHub Actions, Ruby, shell scripting (.sh, .ps1).
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- Pillar 5: Testing -->
+        <div class="tech-module glass-panel">
+            <div class="tech-module-header">
+                <h3>Quality Assurance</h3>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="tech-module-content">
+                <div class="tech-module-inner">
+                    <p class="philosophy">A layered architecture inherently enables robust, isolated testing. I advocate heavily for Test-Driven workflows and Behavior-Driven frameworks that map directly back to the domain ubiquitous language.</p>
+                    <div class="ecosystem">
+                        <strong>Methodologies:</strong> Unit Testing, Behavior-Driven Development (BDD), E2E.<br>
+                        <strong>Tooling:</strong> Appium, Mockito, Gherkin, Pytest.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 6: Analytics -->
+        <div class="tech-module glass-panel">
+            <div class="tech-module-header">
+                <h3>Telemetry & Business Integration</h3>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="tech-module-content">
+                <div class="tech-module-inner">
+                    <p class="philosophy">Software must provide observable outcomes. I architect telemetry layers that map technical events to CRM flows, bridging the gap between application state and business intelligence.</p>
+                    <div class="ecosystem">
+                        <strong>Analytics:</strong> PostHog, GA4, Firebase Analytics.<br>
+                        <strong>CRM Integrations:</strong> Zoho Suite (Zoho CRM, Books, Flow).
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>

@@ -63,5 +63,4 @@ section {
 @media (max-width: 900px) {
     .about-grid { grid-template-columns: 1fr; }
     #avatar-placeholder { margin: 0 auto; display: block; }
-    .nav-links { display: none; }
 }

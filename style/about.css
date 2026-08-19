@@ -1,22 +1,246 @@
+/* ==========================================
+   ABOUT SECTION LAYOUT
+========================================== */
 .about-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1.5fr;
     gap: 4rem;
     align-items: center;
 }
+
 #avatar-placeholder {
     width: 100%;
     max-width: 450px;
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     border: 1px solid var(--glass-border);
+    aspect-ratio: 4/5;
+    object-fit: cover;
 }
-.about-text p {
-    margin-bottom: 1.5rem;
-    font-size: 1.1rem;
-    color: var(--text-muted);
+
+.about-text {
+    padding: 3rem;
 }
+
 .about-text h3 {
     font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-main);
+    line-height: 1.3;
+}
+
+.about-text p {
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.team-action-wrapper {
+    margin-top: 2rem;
+}
+
+/* ==========================================
+   EASTER EGG (Smooth Slide-Down Logic)
+========================================== */
+.team-grid-container {
+    display: grid;
+    grid-template-rows: 0fr; /* Collapsed state */
+    transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.5s ease;
+    margin-top: 0;
+}
+
+.team-grid-container.is-visible {
+    grid-template-rows: 1fr; /* Expanded state */
+    margin-top: 4rem;
+}
+
+/* Inner wrapper handles opacity while parent handles height */
+.team-grid-inner {
+    min-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.team-grid-container.is-visible .team-grid-inner {
+    opacity: 1;
+    transform: translateY(0);
+    overflow: visible; /* Allows hover shadows to bleed outside the box */
+}
+
+/* ==========================================
+   MASTER: THE 3 CARDS
+========================================== */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.team-card {
+    padding: 2.5rem 2rem;
+    text-align: center;
+    border-top: 4px solid var(--accent); /* Visual tie-in to amber accent */
+    border-left: 1px solid var(--glass-border);
+    border-right: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(245, 158, 11, 0.1);
+}
+
+.team-card.is-active {
+    border-color: var(--accent);
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);
+    transform: translateY(-5px);
+}
+
+.team-card h4 {
+    font-size: 1.6rem;
+    margin-bottom: 0.2rem;
+    color: var(--text-main);
+}
+
+.team-card .role {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.team-card p:last-child {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ==========================================
+   DETAIL: MASTER VIEWER PANEL (Grid Stacking)
+========================================== */
+.team-detail-viewer {
+    display: grid; /* Enables stacking children perfectly */
+    padding: 2.5rem;
+}
+
+.detail-pane {
+    grid-area: 1 / 1; /* Stacks all content in the exact same cell */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+    z-index: 2;
+}
+
+.detail-pane.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* Detail Text Styles */
+.detail-pane h5 {
+    font-size: 1.4rem;
     margin-bottom: 1rem;
+    color: var(--text-main);
+}
+
+.detail-pane p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.detail-pane ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.detail-pane ul li {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.detail-pane ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: bold;
+}
+
+/* ==========================================
+   RESPONSIVE ADJUSTMENTS & MOBILE CAROUSEL
+========================================== */
+/* ==========================================
+   RESPONSIVE ADJUSTMENTS & MOBILE CAROUSEL
+========================================== */
+@media (max-width: 900px) {
+    .about-grid { 
+        grid-template-columns: 1fr; 
+    }
+    
+    #avatar-placeholder { 
+        margin: 0 auto; 
+        display: none; 
+        max-width: 350px; 
+    }
+    
+    /* 1. TOP PANEL: Constrained to 85% and centered to match the cards below */
+    .about-text { 
+        width: 85%; 
+        margin: 0 auto; 
+        padding: 2.5rem 1.5rem; 
+    }
+    
+    /* Transform Master-Detail into a Horizontal Carousel on Mobile */
+    .team-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 1rem;
+        
+        /* 7.5% padding forces the first/last cards to stop dead-center */
+        padding: 0 7.5% 1rem 7.5%; 
+        
+        /* Hide scrollbars for a native app feel */
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+    }
+    
+    .team-grid::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* 2. MIDDLE PANEL: Takes 100% of padded track (equals 85% screen width) */
+    .team-card {
+        flex: 0 0 100%; 
+        scroll-snap-align: center;
+        padding: 2.5rem 1.5rem; /* Matched internal padding for text alignment */
+    }
+    
+    /* 3. BOTTOM PANEL: Constrained to 85% and centered */
+    .team-detail-viewer { 
+        width: 85%;                     
+        margin: 0.5rem auto 0 auto;     
+        padding: 2.5rem 1.5rem; /* Matched internal padding for text alignment */       
+    }
 }

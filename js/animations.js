@@ -17,18 +17,22 @@ export function initAnimations() {
     lightboxClose?.addEventListener('click', closeLightbox);
 
     // --- 2. Initial Fade Reveals ---
-    gsap.utils.toArray('.fade-up').forEach((element) => {
+    // This existing block handles the Hero entrance perfectly
+    gsap.utils.toArray('.fade-up').forEach((element, index) => {
         gsap.from(element, {
             scrollTrigger: { 
-                trigger: element,
-                 start: "top 85%",
-                  //toggleActions: "play none none reverse",
-                  once: true 
-                 },
-            y: 60, opacity: 0, duration: 1, ease: "power3.out",clearProps: "all"
+                trigger: element, 
+                start: "top 90%", 
+                once: true 
+            },
+            y: 30, // Reduced from 60 to make the motion calmer
+            opacity: 0, 
+            duration: 1, 
+            delay: index * 0.15, // Staggered entrance for hero elements
+            ease: "power3.out",
+            clearProps: "all"
         });
     });
-
     // --- 3. FLIP Animation Engine (Grid Repositioning) ---
     const performFlipLayout = (action) => {
         const cards = document.querySelectorAll('.project-card');
@@ -61,14 +65,11 @@ export function initAnimations() {
         });
     };
 
-    // --- 4. Multi-State 3D Flip Engine ---
+// --- 4. Semantic 3D Flip Engine (Front vs Back) ---
     document.querySelectorAll('.project-card').forEach(card => {
         const inner = card.querySelector('.card-inner');
-        
         const faceFront = card.querySelector('.face-front');
-        const faceContent1 = card.querySelector('.face-content-1');
-        const faceContent2 = card.querySelector('.face-content-2'); // Might be null
-        const faceFinal = card.querySelector('.face-final');
+        const faceBack = card.querySelector('.face-back');
         
         const frontIdle = card.querySelector('.front-idle-content');
         const frontExpanded = card.querySelector('.front-expanded-content');
@@ -76,43 +77,23 @@ export function initAnimations() {
         // Setup Carousel
         let carouselInterval;
         const slides = card.querySelectorAll('.carousel-slide');
-        const indicatorContainer = card.querySelector('.carousel-indicators');
-        let currentSlide = 0;
-
-        if (indicatorContainer && slides.length > 0) {
-            indicatorContainer.innerHTML = '';
-            slides.forEach((_, idx) => {
-                const dot = document.createElement('div');
-                dot.classList.add('indicator');
-                if (idx === 0) dot.classList.add('active');
-                indicatorContainer.appendChild(dot);
-            });
-        }
         const indicators = card.querySelectorAll('.indicator');
+        let currentSlide = 0;
 
         const startCarousel = () => {
             if (slides.length <= 1) return;
             carouselInterval = setInterval(() => {
-                slides[currentSlide].classList.remove('active');
-                indicators[currentSlide].classList.remove('active');
+                if(slides[currentSlide]) slides[currentSlide].classList.remove('active');
+                if(indicators[currentSlide]) indicators[currentSlide].classList.remove('active');
                 currentSlide = (currentSlide + 1) % slides.length;
-                slides[currentSlide].classList.add('active');
-                indicators[currentSlide].classList.add('active');
+                if(slides[currentSlide]) slides[currentSlide].classList.add('active');
+                if(indicators[currentSlide]) indicators[currentSlide].classList.add('active');
             }, 3000);
         };
         const stopCarousel = () => clearInterval(carouselInterval);
 
-        const hasContent2 = !!faceContent2;
-        const finalYRotation = hasContent2 ? -360 : -180;
-        
-        if (faceContent1) faceContent1.style.transform = `rotateY(180deg) rotateX(0deg)`;
-        if (faceContent2) faceContent2.style.transform = `rotateY(360deg) rotateX(0deg)`;
-        if (faceFinal) faceFinal.style.transform = `rotateY(${Math.abs(finalYRotation)}deg) rotateX(180deg)`;
+        let currentState = 'IDLE'; // IDLE, EXPANDED, FLIPPED
 
-        let currentState = 'IDLE';
-        let activeFace = faceFront;
-
-        // Custom event so other cards can force this card back to IDLE 
         card.addEventListener('forceIdle', () => {
             if (currentState !== 'IDLE') {
                 currentState = 'IDLE';
@@ -121,11 +102,10 @@ export function initAnimations() {
                 frontExpanded.classList.add('hidden');
                 stopCarousel();
                 
-                // Immediately spin back to front face
-                gsap.to(inner, { rotateX: 0, rotateY: 0, duration: 0.6, ease: "power3.inOut" });
-                
-                const allFaces = [faceFront, faceContent1, faceContent2, faceFinal].filter(f=>f);
-                allFaces.forEach(face => { face.style.visibility = (face === faceFront) ? 'visible' : 'hidden'; });
+                // Immediately reset 3D rotation
+                gsap.to(inner, { rotateY: 0, duration: 0.6, ease: "power3.inOut" });
+                faceFront.style.visibility = 'visible';
+                faceBack.style.visibility = 'hidden';
             }
         });
 
@@ -133,13 +113,12 @@ export function initAnimations() {
             const oldState = currentState;
             if (oldState === newState) return;
             
-            // Check if this state change triggers a grid size layout change
+            // Check if this triggers a grid size change (FLIP animation required)
             const isLayoutChange = (oldState === 'IDLE' || newState === 'IDLE');
 
             const stateChangeLogic = () => {
                 currentState = newState;
                 
-                // Logic: If expanding from IDLE, move DOM element to index 0
                 if (oldState === 'IDLE' && newState === 'EXPANDED') {
                     card.parentNode.prepend(card);
                 }
@@ -153,104 +132,155 @@ export function initAnimations() {
                     card.classList.add('is-active');
                     frontIdle.classList.add('hidden');
                     frontExpanded.classList.remove('hidden');
-                    if(oldState === 'IDLE') startCarousel();
+                    if (currentState === 'EXPANDED') startCarousel();
+                    else stopCarousel(); // Stop when flipped
                 }
 
-                if (currentState !== 'EXPANDED' && currentState !== 'IDLE') stopCarousel();
+                // Handle the 3D Rotation
+                let targetY = (currentState === 'FLIPPED') ? -180 : 0;
+                let activeFace = (currentState === 'FLIPPED') ? faceBack : faceFront;
 
-                let targetX = 0, targetY = 0;
-                switch(currentState) {
-                    case 'IDLE': case 'EXPANDED': targetX = 0; targetY = 0; activeFace = faceFront; break;
-                    case 'CONTENT_1': targetX = 0; targetY = -180; activeFace = faceContent1; break;
-                    case 'CONTENT_2': targetX = 0; targetY = -360; activeFace = faceContent2; break;
-                    case 'FINAL': targetX = -180; targetY = finalYRotation; activeFace = faceFinal; break;
-                }
-
-                const allFaces = [faceFront, faceContent1, faceContent2, faceFinal].filter(f => f);
-                allFaces.forEach(face => {
-                    if (face === activeFace || face.style.visibility === 'visible') face.style.visibility = 'visible';
-                    else face.style.visibility = 'hidden';
-                });
+                // Ensure both faces are visible during the rotation
+                faceFront.style.visibility = 'visible';
+                faceBack.style.visibility = 'visible';
 
                 gsap.to(inner, {
-                    rotateX: targetX, rotateY: targetY, duration: 0.8, ease: "power3.inOut",
+                    rotateY: targetY, 
+                    duration: 0.8, 
+                    ease: "power3.inOut",
                     onComplete: () => {
-                        allFaces.forEach(face => {
-                            face.style.visibility = (face === activeFace) ? 'visible' : 'hidden';
-                        });
+                        // Hide the inactive face after rotation to prevent clipping issues
+                        faceFront.style.visibility = (activeFace === faceFront) ? 'visible' : 'hidden';
+                        faceBack.style.visibility = (activeFace === faceBack) ? 'visible' : 'hidden';
+                        
+                        // Reset scroll positions
                         const scrollable = activeFace.querySelector('.scrollable-text');
                         if (scrollable) scrollable.scrollTop = 0;
                     }
                 });
 
-                // ==========================================
-                // FIX: Auto-scroll accurately to grid start 
-                // ==========================================
+                // Auto-scroll logic when expanding
                 if (oldState === 'IDLE' && newState === 'EXPANDED') {
                     setTimeout(() => {
                         const gridContainer = card.closest('.projects-grid');
-                        const yOffset = -100; // Account for fixed nav spacing (adjust if needed)
-                        
-                        // By tracking the grid container rather than the card itself,
-                        // we bypass GSAP's mid-flight transform coordinates 
+                        const yOffset = -100;
                         const y = gridContainer.getBoundingClientRect().top + window.scrollY + yOffset;
-                        
                         window.scrollTo({top: y, behavior: 'smooth'});
                     }, 50);
                 }
             };
 
-            // If layout dictates grid repaints, wrap it in the FLIP engine!
             if (isLayoutChange) {
                 if (newState === 'EXPANDED') {
-                    // Tell all OTHER cards to close themselves
                     document.querySelectorAll('.project-card').forEach(c => {
                         if (c !== card) c.dispatchEvent(new Event('forceIdle'));
                     });
                 }
                 performFlipLayout(stateChangeLogic);
             } else {
-                stateChangeLogic(); // Just standard 3D flip, no grid recalculation needed
+                stateChangeLogic();
             }
         };
 
+        // Event Listeners for the semantic buttons
         card.addEventListener('click', (e) => {
             e.stopPropagation();
 
             if (e.target.closest('.read-more-btn')) applyState('EXPANDED');
+            if (e.target.closest('.btn-back-idle')) applyState('IDLE');
             
-            if (e.target.closest('.btn-next-content1')) applyState('CONTENT_1');
-            if (e.target.closest('.btn-next-content2')) applyState('CONTENT_2');
-            if (e.target.closest('.btn-next-final')) applyState('FINAL');
+            // Front to Back
+            if (e.target.closest('.btn-flip-back')) applyState('FLIPPED');
             
-            if (e.target.closest('.btn-back-idle') || e.target.closest('.btn-close-idle')) applyState('IDLE');
-            if (e.target.closest('.btn-back-expanded')) applyState('EXPANDED');
-            if (e.target.closest('.btn-back-content1')) applyState('CONTENT_1');
-            if (e.target.closest('.btn-back-content2')) {
-                applyState(hasContent2 ? 'CONTENT_2' : 'CONTENT_1'); 
-            }
+            // Back to Front
+            if (e.target.closest('.btn-flip-front')) applyState('EXPANDED');
 
             const galleryImg = e.target.closest('.detail-gallery-img');
             if (galleryImg) openLightbox(galleryImg.src);
         });
+    });
 
-        // Mouse Parallax for flipped faces
-        card.addEventListener('mousemove', (e) => {
-            if (currentState === 'IDLE' || currentState === 'EXPANDED') return;
-            const rect = card.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width - 0.5;
-            const y = (e.clientY - rect.top) / rect.height - 0.5;
+// --- 5. "Meet the Team" Easter Egg Logic ---
+    const btnMeetTeam = document.getElementById('btn-meet-team');
+    const teamContainer = document.getElementById('team-easter-egg');
+    const teamCards = document.querySelectorAll('.team-card');
+    const detailPanes = document.querySelectorAll('.detail-pane');
 
-            const visibleParallax = activeFace?.querySelector('.parallax-img');
-            if (visibleParallax) {
-                gsap.to(visibleParallax, { x: x * 40, y: y * 40, duration: 0.3, ease: "power2.out" });
+    if (btnMeetTeam && teamContainer) {
+        // Toggle the entire Easter Egg section
+        btnMeetTeam.addEventListener('click', () => {
+            const isHidden = !teamContainer.classList.contains('is-visible');
+            
+            if (isHidden) {
+                teamContainer.classList.add('is-visible');
+                btnMeetTeam.textContent = "Hide Team Structure";
+                
+                setTimeout(() => {
+                    const y = teamContainer.getBoundingClientRect().top + window.scrollY - 100;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                    
+                    gsap.fromTo(teamCards, 
+                        { y: 30, opacity: 0 }, 
+                        { y: 0, opacity: 1, duration: 0.6, stagger: 0.15, ease: "power3.out" }
+                    );
+                }, 100);
+            } else {
+                teamContainer.classList.remove('is-visible');
+                btnMeetTeam.textContent = "View Team Structure";
             }
         });
 
-        card.addEventListener('mouseleave', () => {
-            card.querySelectorAll('.parallax-img').forEach(img => {
-                gsap.to(img, { x: 0, y: 0, duration: 0.5 });
-            });
+        // Master-Detail Hover & Click Logic
+        teamCards.forEach(card => {
+            const triggerDetail = () => {
+                const targetId = card.getAttribute('data-target');
+                
+                // Remove active class from all cards and panes
+                teamCards.forEach(c => c.classList.remove('is-active'));
+                detailPanes.forEach(p => p.classList.remove('is-active'));
+                
+                // Activate selected card and pane
+                card.classList.add('is-active');
+                const targetPane = document.getElementById(targetId);
+                if (targetPane) targetPane.classList.add('is-active');
+
+                // NEW: On mobile, gracefully slide the tapped card into the center
+                if (window.innerWidth <= 900) {
+                    card.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'nearest', 
+                        inline: 'center' 
+                    });
+                }
+            };
+
+            card.addEventListener('mouseenter', triggerDetail);
+            card.addEventListener('click', triggerDetail);
+        });
+    }
+    // --- 6. Technical Capabilities Accordion ---
+    const techModules = document.querySelectorAll('.tech-module');
+    
+    techModules.forEach(module => {
+        const header = module.querySelector('.tech-module-header');
+        header.addEventListener('click', () => {
+            const isOpen = module.classList.contains('is-open');
+            
+            // Optional: Close all other modules first for a cleaner UX
+            techModules.forEach(m => m.classList.remove('is-open'));
+            
+            // If it wasn't already open, open it
+            if (!isOpen) {
+                module.classList.add('is-open');
+                
+                // Semantic UX: Scroll module into view if offscreen
+                setTimeout(() => {
+                    const rect = module.getBoundingClientRect();
+                    if (rect.bottom > window.innerHeight) {
+                        window.scrollBy({ top: rect.bottom - window.innerHeight + 20, behavior: 'smooth' });
+                    }
+                }, 400);
+            }
         });
     });
 }

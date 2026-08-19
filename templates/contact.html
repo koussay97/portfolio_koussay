@@ -1,10 +1,63 @@
-<header class="global-header">
-    <nav aria-label="Main Navigation" class="main-nav">
+<section id="contact" class="contact-section">
+    <div class="contact-grid">
+        
+        <!-- Left: Identity & Geolocation -->
+        <div class="contact-identity fade-up">
+            <h2>Establish Connection</h2>
+            <img class="contact-avatar" src="./assets/identity/me.jpeg" alt="Arkana Labs Operator">
+            
+            <div class="geo-details">
+                <div class="geo-item">
+                    <span class="geo-label">Location</span>
+                    <span class="geo-value">Monastir, Tunisia</span>
+                </div>
+                <div class="geo-item">
+                    <span class="geo-label">Operations</span>
+                    <span class="geo-value">Remote / Worldwide</span>
+                </div>
+                <div class="geo-item">
+                    <span class="geo-label">Direct Line</span>
+                    <span class="geo-value">+216 55 54 34 40</span>
+                </div>
+            </div>
+        </div>
 
-        <!-- Brand / Home Link -->
-        <a href="#hero" class="nav-brand" aria-label="Arkana Labs Home">
+        <!-- Right: Business Logic Form -->
+        <div class="contact-form-wrapper glass-panel fade-up">
+            <form class="engineered-form" action="https://formspree.io/f/YOUR_FORMSPREE_ENDPOINT" method="POST">
+                
+                <div class="form-group">
+                    <label for="intent">Engagement Intent</label>
+                    <!-- Audience Segmentation Dropdown -->
+                    <select id="intent" name="Subject" required>
+                        <option value="" disabled selected>Select engagement type...</option>
+                        <option value="architectural_audit">Request Architectural Consultation / Audit</option>
+                        <option value="b2b_services">Evaluate B2B Commercial Services</option>
+                        <option value="technical_meetup">Propose Technical Meetup / Speaking</option>
+                        <option value="general_synergy">Explore General Technical Synergies</option>
+                    </select>
+                </div>
 
-            <svg
+                <div class="form-group">
+                    <label for="email">Return Protocol (Email)</label>
+                    <input type="email" id="email" name="_replyto" placeholder="engineering@yourcompany.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Transmission Details</label>
+                    <textarea id="message" name="Message" rows="5" placeholder="Define the system constraints or business objective..." required></textarea>
+                </div>
+
+                <button type="submit" class="action-btn submit-btn">Initialize Handshake →</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Canonical Footer -->
+<footer class="global-footer">
+    <div class="footer-content">
+<svg
                 class="brand-logo"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 1024 1024"
@@ -40,26 +93,10 @@
                 </g>
 
             </svg>
-
-            <span class="brand-text">Arkana Labs</span>
-        </a>
-
-        <!-- Primary Navigation -->
-        <div class="nav-links">
-            <a href="#about">About</a>
-            <a href="#tech">Capabilities</a>
-            <a href="#projects">Professional Projects</a>
+        <div class="footer-text">
+            <p><strong>Arkana Labs</strong></p>
+            <p>Features are temporary. Process is durable.</p>
+            <p class="copyright">© 2026 Arkana Labs. All rights reserved.</p>
         </div>
-
-        <!-- Mobile Menu Toggle -->
-        <button
-            class="mobile-menu-toggle"
-            aria-expanded="false"
-            aria-label="Toggle navigation menu"
-        >
-            <span class="menu-icon-line"></span>
-            <span class="menu-icon-line"></span>
-        </button>
-
-    </nav>
-</header>
+    </div>
+</footer>
