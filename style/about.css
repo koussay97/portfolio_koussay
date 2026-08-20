@@ -6,6 +6,8 @@
     grid-template-columns: 1fr 1.5fr;
     gap: 4rem;
     align-items: center;
+    width: 100%;
+    max-width: 100%;
 }
 
 #avatar-placeholder {
@@ -48,6 +50,11 @@
     grid-template-rows: 0fr; /* Collapsed state */
     transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.5s ease;
     margin-top: 0;
+    
+    /* ENGINEERED FIX: Prevent CSS Grid horizontal blowout */
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
 }
 
 .team-grid-container.is-visible {
@@ -58,6 +65,12 @@
 /* Inner wrapper handles opacity while parent handles height */
 .team-grid-inner {
     min-height: 0;
+    
+    /* ENGINEERED FIX: Force grid item to obey parent width constraints */
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    
     overflow: hidden;
     opacity: 0;
     transform: translateY(20px);
@@ -67,7 +80,8 @@
 .team-grid-container.is-visible .team-grid-inner {
     opacity: 1;
     transform: translateY(0);
-    overflow: visible; /* Allows hover shadows to bleed outside the box */
+    overflow-y: visible; /* Allows hover shadows to bleed vertically */
+    overflow-x: clip;    /* Strictly prevents horizontal bleed */
 }
 
 /* ==========================================
@@ -128,12 +142,16 @@
    DETAIL: MASTER VIEWER PANEL (Grid Stacking)
 ========================================== */
 .team-detail-viewer {
-    display: grid; /* Enables stacking children perfectly */
+    position: relative; /* Replaced grid so height can adjust dynamically */
     padding: 2.5rem;
+    overflow: hidden; /* Prevents fading text from spilling out when container shrinks */
 }
 
 .detail-pane {
-    grid-area: 1 / 1; /* Stacks all content in the exact same cell */
+    position: absolute; /* Inactive panes are removed from layout flow */
+    top: 2.5rem; /* Matches parent padding so crossfade stays perfectly in place */
+    left: 2.5rem;
+    right: 2.5rem;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -143,6 +161,10 @@
 }
 
 .detail-pane.is-active {
+    position: relative; /* Active pane enters flow and dictates container height */
+    top: auto;
+    left: auto;
+    right: auto;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -170,7 +192,6 @@
 }
 
 .detail-pane ul li {
-    color: var(--text-muted);
     font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: 0.8rem;
@@ -189,25 +210,22 @@
 /* ==========================================
    RESPONSIVE ADJUSTMENTS & MOBILE CAROUSEL
 ========================================== */
-/* ==========================================
-   RESPONSIVE ADJUSTMENTS & MOBILE CAROUSEL
-========================================== */
 @media (max-width: 900px) {
     .about-grid { 
         grid-template-columns: 1fr; 
+        gap: 2rem; /* Reduced gap from 4rem to tighten the layout */
     }
     
     #avatar-placeholder { 
-        margin: 0 auto; 
-        display: none; 
-        max-width: 350px; 
+        display: none !important; /* Forces complete removal */
     }
     
-    /* 1. TOP PANEL: Constrained to 85% and centered to match the cards below */
+    /* 1. TOP PANEL: Constrained, mathematically centered, and padding reduced */
     .about-text { 
         width: 85%; 
         margin: 0 auto; 
-        padding: 2.5rem 1.5rem; 
+        justify-self: center; /* ENGINEERED FIX: Forces true centering in CSS Grid */
+        padding: 2rem 1.5rem; 
     }
     
     /* Transform Master-Detail into a Horizontal Carousel on Mobile */
@@ -217,13 +235,14 @@
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         gap: 1rem;
-        
-        /* 7.5% padding forces the first/last cards to stop dead-center */
         padding: 0 7.5% 1rem 7.5%; 
         
-        /* Hide scrollbars for a native app feel */
         scrollbar-width: none; 
         -ms-overflow-style: none;
+
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
     }
     
     .team-grid::-webkit-scrollbar {
@@ -234,13 +253,21 @@
     .team-card {
         flex: 0 0 100%; 
         scroll-snap-align: center;
-        padding: 2.5rem 1.5rem; /* Matched internal padding for text alignment */
+        padding: 2rem 1.5rem; /* Matched reduced padding */
     }
     
-    /* 3. BOTTOM PANEL: Constrained to 85% and centered */
+    /* 3. BOTTOM PANEL: Constrained to 85%, centered, padding reduced */
     .team-detail-viewer { 
         width: 85%;                     
-        margin: 0.5rem auto 0 auto;     
-        padding: 2.5rem 1.5rem; /* Matched internal padding for text alignment */       
+        margin: 0.5rem auto 0 auto; 
+        justify-self: center; 
+        padding: 2rem 1.5rem; /* Matched reduced padding */       
     }
+    .detail-pane {
+        /* ENGINEERED FIX: Match absolute coordinates to mobile padding */
+        top: 2rem;
+        left: 1.5rem;
+        right: 1.5rem;
+    }
+
 }

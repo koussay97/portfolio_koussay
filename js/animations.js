@@ -16,22 +16,26 @@ export function initAnimations() {
     lightbox?.addEventListener('click', closeLightbox);
     lightboxClose?.addEventListener('click', closeLightbox);
 
-    // --- 2. Initial Fade Reveals ---
-    // This existing block handles the Hero entrance perfectly
-    gsap.utils.toArray('.fade-up').forEach((element, index) => {
-        gsap.from(element, {
-            scrollTrigger: { 
-                trigger: element, 
-                start: "top 90%", 
-                once: true 
-            },
-            y: 30, // Reduced from 60 to make the motion calmer
-            opacity: 0, 
-            duration: 1, 
-            delay: index * 0.15, // Staggered entrance for hero elements
-            ease: "power3.out",
-            clearProps: "all"
-        });
+ 
+    // --- 2. Initial Fade Reveals (Engineered Batch Processor) ---
+    // ScrollTrigger.batch solves the "global delay leak" by only staggering items 
+    // that enter the viewport at the exact same time.
+    gsap.set(".fade-up", { y: 30, opacity: 0 });
+
+    ScrollTrigger.batch(".fade-up", {
+        start: "top 85%", 
+        once: true,
+        onEnter: (batch) => {
+            // Because they are already hidden, we animate TO their natural state
+            gsap.to(batch, {
+                y: 0,
+                opacity: 1,
+                duration: 0.5,
+                stagger: 0.1,
+                ease: "power3.out",
+                clearProps: "all" // Cleans up the inline styles after completion
+            });
+        }
     });
     // --- 3. FLIP Animation Engine (Grid Repositioning) ---
     const performFlipLayout = (action) => {
@@ -116,10 +120,12 @@ export function initAnimations() {
             // Check if this triggers a grid size change (FLIP animation required)
             const isLayoutChange = (oldState === 'IDLE' || newState === 'IDLE');
 
-            const stateChangeLogic = () => {
+          const stateChangeLogic = () => {
                 currentState = newState;
                 
-                if (oldState === 'IDLE' && newState === 'EXPANDED') {
+                // ENGINEERED FIX: Only reorder (prepend) on Desktop grids.
+                // On mobile, keep the card exactly where it is in the scroll list to preserve context.
+                if (oldState === 'IDLE' && newState === 'EXPANDED' && window.innerWidth > 900) {
                     card.parentNode.prepend(card);
                 }
                 
@@ -162,9 +168,12 @@ export function initAnimations() {
                 // Auto-scroll logic when expanding
                 if (oldState === 'IDLE' && newState === 'EXPANDED') {
                     setTimeout(() => {
-                        const gridContainer = card.closest('.projects-grid');
-                        const yOffset = -100;
-                        const y = gridContainer.getBoundingClientRect().top + window.scrollY + yOffset;
+                        const yOffset = -100; // Account for fixed nav
+                        
+                        // Desktop: Scroll to grid top. Mobile: Scroll to card top.
+                        const targetElement = window.innerWidth > 900 ? card.closest('.projects-grid') : card;
+                        
+                        const y = targetElement.getBoundingClientRect().top + window.scrollY + yOffset;
                         window.scrollTo({top: y, behavior: 'smooth'});
                     }, 50);
                 }
@@ -230,33 +239,56 @@ export function initAnimations() {
             }
         });
 
-        // Master-Detail Hover & Click Logic
-        teamCards.forEach(card => {
-            const triggerDetail = () => {
-                const targetId = card.getAttribute('data-target');
-                
-                // Remove active class from all cards and panes
-                teamCards.forEach(c => c.classList.remove('is-active'));
-                detailPanes.forEach(p => p.classList.remove('is-active'));
-                
-                // Activate selected card and pane
-                card.classList.add('is-active');
-                const targetPane = document.getElementById(targetId);
-                if (targetPane) targetPane.classList.add('is-active');
+        // Extracted Core Logic for activating a card
+        const activateCard = (card) => {
+            // Prevent unnecessary DOM updates if already active
+            if (card.classList.contains('is-active')) return; 
 
-                // NEW: On mobile, gracefully slide the tapped card into the center
+            const targetId = card.getAttribute('data-target');
+            
+            // Reset all
+            teamCards.forEach(c => c.classList.remove('is-active'));
+            detailPanes.forEach(p => p.classList.remove('is-active'));
+            
+            // Activate target
+            card.classList.add('is-active');
+            const targetPane = document.getElementById(targetId);
+            if (targetPane) targetPane.classList.add('is-active');
+        };
+
+        // 1. Mouse & Click Listeners
+        teamCards.forEach(card => {
+            card.addEventListener('mouseenter', () => activateCard(card));
+            card.addEventListener('click', () => {
+                activateCard(card);
+                // If on mobile and tapped, slide it to center manually
                 if (window.innerWidth <= 900) {
-                    card.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'nearest', 
-                        inline: 'center' 
-                    });
+                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                 }
+            });
+        });
+
+        // 2. Swiping Sensor (Intersection Observer for Mobile)
+        // This detects when a card snaps into the center via swipe
+        const scrollContainer = document.querySelector('.team-grid');
+        if (scrollContainer) {
+            const observerOptions = {
+                root: scrollContainer,
+                rootMargin: '0px',
+                threshold: 0.6 // Triggers when 60% of the card is visible in the container
             };
 
-            card.addEventListener('mouseenter', triggerDetail);
-            card.addEventListener('click', triggerDetail);
-        });
+            const swipeObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // Only apply swipe logic on mobile layouts
+                    if (entry.isIntersecting && window.innerWidth <= 900) {
+                        activateCard(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            teamCards.forEach(card => swipeObserver.observe(card));
+        }
     }
     // --- 6. Technical Capabilities Accordion ---
     const techModules = document.querySelectorAll('.tech-module');
@@ -283,4 +315,153 @@ export function initAnimations() {
             }
         });
     });
+    // --- 7. Contact Form Logic & Demo Routing ---
+    const intentSelect = document.getElementById('intent');
+    const demoFields = document.querySelectorAll('.demo-only-field');
+    const demoSelect = document.getElementById('demo');
+    const urlInput = document.getElementById('url');
+
+    // 7A. Dynamic Form Fields Based on Intent
+    if (intentSelect) {
+        intentSelect.addEventListener('change', (e) => {
+            const isDemo = e.target.value === 'general_synergy';
+            
+            demoFields.forEach(field => {
+                // Show/hide the form groups
+                field.style.display = isDemo ? 'flex' : 'none';
+            });
+
+            // Dynamically add/remove the 'required' attribute
+            if (isDemo) {
+                if (demoSelect) demoSelect.setAttribute('required', 'true');
+                if (urlInput) urlInput.setAttribute('required', 'true');
+            } else {
+                if (demoSelect) demoSelect.removeAttribute('required');
+                if (urlInput) urlInput.removeAttribute('required');
+            }
+        });
+    }
+
+    // 7B. Handle "Request a Demo" button clicks on Project Cards
+    const demoButtons = document.querySelectorAll('.store-link');
+    demoButtons.forEach(btn => {
+        if (btn.textContent.trim().toLowerCase() === 'request a demo') {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent it from trying to act like a normal link
+                
+                // 1. Identify which project card the button belongs to
+                const projectCard = btn.closest('.project-card');
+                const projectId = projectCard ? projectCard.getAttribute('data-project') : null;
+                
+                // 2. Set the Intent to Demo & trigger the UI update
+                if (intentSelect) {
+                    intentSelect.value = 'general_synergy';
+                    intentSelect.dispatchEvent(new Event('change')); // Forces the hidden fields to appear
+                }
+                
+                // 3. Set the specific project in the newly revealed dropdown
+                if (demoSelect) {
+                    if (projectId === 'joel') demoSelect.value = 'Joel apps';
+                    if (projectId === 'mushir') demoSelect.value = 'Mushir';
+                }
+
+                // 4. Show engineered Toast Popup
+                showToast(`Demo requested for ${projectId === 'joel' ? 'Joel Apps' : 'Mushir'}. Please submit the form below.`);
+
+                // 5. Smooth scroll down to the contact section
+                const contactSection = document.getElementById('contact');
+                if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        }
+    });
+
+    // 7C. Sleek Toast Notification System
+    function showToast(message) {
+        let toast = document.getElementById('arkana-toast');
+        
+        // Create the toast element if it doesn't exist
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'arkana-toast';
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%) translateY(100px);
+                background: var(--card-dark, #1F2937);
+                color: #fff;
+                padding: 14px 28px;
+                border-radius: 8px;
+                font-size: 0.95rem;
+                font-weight: 500;
+                z-index: 9999;
+                opacity: 0;
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                border: 1px solid var(--accent, #F59E0B);
+                text-align: center;
+                pointer-events: none;
+            `;
+            document.body.appendChild(toast);
+        }
+        
+        toast.textContent = message;
+        
+        // Animate Toast In
+        requestAnimationFrame(() => {
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            toast.style.opacity = '1';
+        });
+
+        // Hide Toast after 4 seconds
+        setTimeout(() => {
+            toast.style.transform = 'translateX(-50%) translateY(100px)';
+            toast.style.opacity = '0';
+        }, 4000);
+    }
+    // 7D. Engineered Form Validation Middleware
+    const contactForm = document.getElementById('arkana-contact-form');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            const emailInput = document.getElementById('email');
+            const messageInput = document.getElementById('message');
+            const urlInput = document.getElementById('url');
+            
+            // Regex for strict email and URL validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            // Matches http://, https://, or just domain.com formats
+            const urlRegex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i;
+
+            // 1. Validate Message Length (Ignore whitespace)
+            if (messageInput.value.trim().length < 20) {
+                e.preventDefault(); // Stop submission
+                showToast("Transmission denied: Details must be at least 20 characters.");
+                messageInput.focus();
+                return;
+            }
+
+            // 2. Validate Email Format
+            if (!emailRegex.test(emailInput.value.trim())) {
+                e.preventDefault();
+                showToast("Transmission denied: Invalid return protocol (email format).");
+                emailInput.focus();
+                return;
+            }
+
+            // 3. Validate Company Website (Only if the field is visible/required)
+            if (urlInput.hasAttribute('required')) {
+                if (!urlRegex.test(urlInput.value.trim())) {
+                    e.preventDefault();
+                    showToast("Transmission denied: Invalid company website URL.");
+                    urlInput.focus();
+                    return;
+                }
+            }
+
+            // If all checks pass, allow native submission to Formspree
+        });
+    }
 }

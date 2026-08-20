@@ -24,18 +24,34 @@
 
         <!-- Right: Business Logic Form -->
         <div class="contact-form-wrapper glass-panel fade-up">
-            <form class="engineered-form" action="https://formspree.io/f/YOUR_FORMSPREE_ENDPOINT" method="POST">
+            <form class="engineered-form" id="arkana-contact-form" action="https://formspree.io/f/mvkplojr" method="POST">
                 
                 <div class="form-group">
                     <label for="intent">Engagement Intent</label>
-                    <!-- Audience Segmentation Dropdown -->
                     <select id="intent" name="Subject" required>
                         <option value="" disabled selected>Select engagement type...</option>
                         <option value="architectural_audit">Request Architectural Consultation / Audit</option>
-                        <option value="b2b_services">Evaluate B2B Commercial Services</option>
+                        <option value="b2b_services">Evaluate B2B Commercial Services / Hire</option>
                         <option value="technical_meetup">Propose Technical Meetup / Speaking</option>
-                        <option value="general_synergy">Explore General Technical Synergies</option>
+                        <!-- Added 'demo' class identifier to this specific option -->
+                        <option value="general_synergy" class="demo-trigger">Explore General Technical Synergies / Request Demo</option>
                     </select>
+                </div>
+
+                <!-- Hidden by default: Project Selection -->
+                <div class="form-group demo-only-field" style="display: none;">
+                    <label for="demo">Select Project to Demo</label>
+                    <select id="demo" name="Project_Name">
+                        <option value="" disabled selected>Select project to demo ...</option>
+                        <option value="Joel apps">Joel Apps</option>
+                        <option value="Mushir">Mushir</option>
+                    </select>
+                </div>
+
+                <!-- Hidden by default: Company Website (Syntax Fixed) -->
+                <div class="form-group demo-only-field" style="display: none;">
+                    <label for="url">Your Company's Website</label>
+                    <input type="url" id="url" name="Company_Website" placeholder="https://yourcompany.com">
                 </div>
 
                 <div class="form-group">
@@ -45,7 +61,7 @@
 
                 <div class="form-group">
                     <label for="message">Transmission Details</label>
-                    <textarea id="message" name="Message" rows="5" placeholder="Define the system constraints or business objective..." required></textarea>
+                    <textarea id="message" name="Message" rows="5" placeholder="Define the system constraints or business objective..." minlength="20" required></textarea>
                 </div>
 
                 <button type="submit" class="action-btn submit-btn">Initialize Handshake →</button>

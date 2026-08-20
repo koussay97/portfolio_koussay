@@ -40,3 +40,14 @@
     .contact-form-wrapper { padding: 2rem 1.5rem; }
     .footer-content { flex-direction: column; text-align: center; }
 }
+@media (max-width: 768px) {
+    /* Disable the auto-fit grid and force a strict single column */
+    .personal-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .personal-card {
+        padding: 2rem 1.5rem; /* Slightly tighter internal padding for mobile */
+    }
+}

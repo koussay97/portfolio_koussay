@@ -64,3 +64,21 @@ section {
     .about-grid { grid-template-columns: 1fr; }
     #avatar-placeholder { margin: 0 auto; display: block; }
 }
+
+@media (max-width: 768px) {
+    /* Disable the auto-fit grid and force a strict single column */
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    /* Give the expanded card a little more vertical room on mobile 
+       so the text doesn't feel squashed below the carousel */
+    .project-card.is-active .card-inner {
+        height: 700px; 
+    }
+
+    .carousel-container {
+        flex: 0 0 40%;
+    }
+}
