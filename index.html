@@ -26,7 +26,7 @@
     
     <!-- Example: https://yourusername.github.io/portfolio/assets/og-image.jpg -->
     <meta property="og:image" content="https://koussay97.github.io/portfolio_koussay/assets/white_thumbnail_moz.jpg">
-    <meta property="og:url" content="https://koussay97.github.io/">
+    <meta property="og:url" content="https://koussay97.github.io/portfolio_koussay/">
     <meta property="og:type" content="website">
 
     <!-- Twitter specific tags (LinkedIn also uses these as a fallback) -->
@@ -56,14 +56,31 @@
     <link rel="stylesheet" href="./style/contact.css">
 </head>
 <body>
+        <!-- SEMANTIC UPGRADE: Explicitly defining the global header -->
+    <header id="global-navigation" role="banner">
+        <div data-template="nav"></div>
+    </header>
 
-    <div data-template="nav"></div>
-    <div data-template="hero"></div>
-    <div data-template="about"></div>
-    <div data-template="tech"></div>
-    <div data-template="projects-grid"></div>
-    <div data-template="personal"></div> <!-- NEW -->
-    <div data-template="contact"></div> <!-- NEW (Includes Footer) -->
+    <!-- SEMANTIC UPGRADE: <main> tells AI/Screen Readers "This is the core content" -->
+    <main id="main-content" role="main">
+        
+        <!-- Each template inside uses <section> natively -->
+        <div data-template="hero"></div>
+        <div data-template="about"></div>
+        <div data-template="tech"></div>
+        <div data-template="projects-grid"></div>
+        
+        <!-- SEMANTIC UPGRADE: Personal projects belong in an aside or secondary section -->
+        <aside aria-label="Research and Experiments">
+            <div data-template="personal"></div>
+        </aside>
+
+    </main>
+
+    <!-- SEMANTIC UPGRADE: Explicitly defining the footer/contact area -->
+    <footer id="global-footer" role="contentinfo">
+        <div data-template="contact"></div>
+    </footer>
 
     <!-- Lightbox Overlay -->
     <div id="lightbox" class="lightbox">

@@ -1,0 +1,25 @@
+# Arkana Labs - Professional Profile
+
+> "We build software that stands the test of time."
+
+## Identity
+- **Role:** Senior Software Engineer & Software Architect
+- **Location:** Monastir, Tunisia (Remote / Worldwide)
+- **Philosophy:** Features are temporary. Process is durable. Architecture exists to enable change.
+
+## Core Capabilities
+1. **Core Engineering:** Domain-Driven Design (DDD), Ports and Adapters (Hexagonal), CQRS, Functional Programming, SOLID.
+2. **Mobile Systems:** Flutter, Dart, BLoC, RxDart, Offline-first architecture, FFI, Custom Shaders.
+3. **Backend & AI:** Python, FastAPI, Pydantic, PostgreSQL, MongoDB, LangGraph, LangChain.
+4. **CI/CD Orchestration:** Monorepos (Melos, Nx), Fastlane, Docker, GitHub Actions.
+5. **Quality Assurance:** TDD, BDD, Appium, Mockito, Pytest.
+
+## Selected Systems Architected
+- **Joel Apps:** Closed-loop gig-economy ecosystem in a scalable Flutter monorepo.
+- **Lifebonder:** Privacy-centric social network using WebRTC and local-first data sync.
+- **Xcite Immo:** Multi-tenant SaaS real estate ERP with robust offline-first synchronization.
+- **Gearni:** Omni-channel B2B2C e-commerce platform using NestJS microservices.
+
+## Contact
+- **Intent:** Open to Architectural Audits, B2B Commercial Services, and Technical Synergies.
+- **Website:** https://YOUR-DOMAIN.com
