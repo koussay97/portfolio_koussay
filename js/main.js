@@ -1,40 +1,40 @@
-import { initTemplates } from './loader.js';
 import { initAnimations } from './animations.js';
 import { ThreeScene } from './ThreeScene.js';
+import { initForm } from './form_submission.js';
+import { FunnelEngine } from './funnel_engine.js'; // NEW IMPORT
 
 async function init() {
-    // 1. Load all HTML templates first
-    await initTemplates();
-
+    // 1. Initialize Navigation Logic
     initNav();
-    // 2. Initialize Three.js Scene
+
+    // 2. Initialize Forms & Business Logic
+    initForm();
+
+    // 3. Initialize Three.js Background
     new ThreeScene('canvas-container');
 
-    // 3. Initialize GSAP Animations (must run after templates are loaded)
+    // 4. Initialize GSAP Animations (Renders the site immediately)
     initAnimations();
+
+    // 5. Boot the Funnel Engine (Non-Blocking)
+    // We do NOT use 'await' here. This allows the engine to pause and wait 
+    // for the consent banner in the background without freezing the UI.
+    FunnelEngine.init().catch(console.error);
 }
-/**
- * Handles Mobile Navigation Toggle & Accessibility states
- */
+
 function initNav() {
     const mobileToggle = document.querySelector('.mobile-menu-toggle');
     const navLinks = document.querySelector('.nav-links');
     
     if (!mobileToggle || !navLinks) return;
 
-    // Toggle menu open/close
     mobileToggle.addEventListener('click', () => {
         const isCurrentlyOpen = navLinks.classList.contains('is-open');
-        
-        // Semantic state toggle
         mobileToggle.classList.toggle('is-open');
         navLinks.classList.toggle('is-open');
-        
-        // Accessibility update
         mobileToggle.setAttribute('aria-expanded', !isCurrentlyOpen);
     });
     
-    // Auto-close menu when a link is clicked
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             mobileToggle.classList.remove('is-open');
