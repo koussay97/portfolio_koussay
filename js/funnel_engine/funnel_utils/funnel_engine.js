@@ -3,79 +3,10 @@ import { ConsentManager } from "../consent_manager/consent_manager.js";
 import { ConsentStorage } from "../consent_manager/consent_storage.js";
 import {SessionManager } from "./session_manager.js"
 
-/** 
- * this funnel payload: 
- ```js 
-arkana_lead_state:{
-  "meta": {
-    "version": "1.0",
-    "first_visited_at": "2026-08-22T10:15:30Z",
-    "last_active_at": "2026-08-22T14:20:00Z",
-    "initial_referrer": "https://linkedin.com",
-    "utm": {
-      "source": "linkedin",
-      "medium": "post",
-      "campaign": "architecture_case_study"
-    }
-  },
-  "funnel": {
-    "current_stage": "evaluation", // "awareness" | "interest" | "evaluation" | "intent" | "conversion"
-    "score": 35 // Weighted cumulative score
-  },
-  "awareness": {
-    "total_sessions": 2,
-    "total_page_views": 6,
-    "total_time_seconds": 340,
-    "visited_pages": {
-      "/": 4,
-      "/blog/clean-architecture-monorepos": 2
-    },
-    "sections_browsed_seconds": {
-      "hero": 25,
-      "about": 60,
-      "case_studies": 180,
-      "contact": 75
-    }
-  },
-  "interest": {
-    "explored_team_philosophy": true,
-    "github_repos_clicked": [
-      "flutter_bloc_clean_template",
-      "mqtt_desktop_runner"
-    ]
-  },
-  "evaluation": {
-    "projects_inspected": {
-        "gsp_toolset_windows": {
-          "screenshots_viewed": 5,
-          "checked_impact": true,
-          "external_links_clicked": ["github_demo", "company_website"]
-        },
-        "xcite_immo_saas": {
-          "screenshots_viewed": 3,
-          "checked_impact": true,
-          "external_links_clicked": ["app_store"]
-        } ... the rest of projects
-    }
-  },
-  "intent": {
-    "form_initiated": true,
-    "form_topic_selected": "Architecture Audit & Consulting",
-    "copied_direct_email": false,
-    "time_spent_in_form_seconds": 45
-  },
-  "conversion": {
-    "converted": true,
-    "submitted_at": "2026-08-22T14:25:00Z",
-    "formspree_submission_id": "xyz123"
-  }
-}
-      ```
 
-*/// ==========================================
+// ==========================================
 // FUNNEL ENGINE & BEHAVIORAL ANALYTICS
 // ==========================================
-
 
 
 /** 
@@ -85,7 +16,7 @@ arkana_lead_state:{
  * {
  *   "meta": { "version": "1.0", "first_visited_at": "...", "last_active_at": "...", "utm": {...} },
  *   "funnel": { "current_stage": "awareness", "score": 10 },
- *   "awareness": { "total_sessions": 1, "total_time_seconds": 120, "sections_browsed_seconds": {"hero": 45} },
+ *   "awareness": { "total_sessions": 1, "total_page_views": 1, "total_time_seconds": 120, "sections_browsed_seconds": {"hero": 45} },
  *   "interest": { "explored_team_philosophy": true, "github_repos_clicked": [] },
  *   "evaluation": { "projects_inspected": { "joel_apps": {"screenshots_viewed": 2, "checked_impact": true} } },
  *   "intent": { "form_initiated": true, "form_topic_selected": "b2b_services" },
@@ -139,16 +70,18 @@ export const FunnelEngine = {
       if (res === 1 || res === 2) {
         this.storageAPI = (res === 2) ? localStorage : sessionStorage;
         this.initState();
-        SessionManager.startAutoPing(SessionManager.SESSION_DURATION);
+        
+        // ENGINEERED FIX: Run awareness BEFORE auto-ping so the session count registers correctly
         this.update_awareness_payload();
+        SessionManager.startAutoPing(SessionManager.SESSION_DURATION);
         this.startPeriodicSync();
       } else {
         console.warn("Consent rejected. Funnel halted.");
       }
     } else {
       // Returning user: Resume operations silently
-      SessionManager.startAutoPing(SessionManager.SESSION_DURATION);
       this.update_awareness_payload();
+      SessionManager.startAutoPing(SessionManager.SESSION_DURATION);
       this.startPeriodicSync();
     }
   },
@@ -248,7 +181,7 @@ export const FunnelEngine = {
     window.dataLayer.push({
         event: stageName,
         current_score: this.state.funnel?.score || 0,
-        ...actionData
+        ...actionData // Flattened properties to bypass GA4's nested JSON limits
     });
   },
 
@@ -263,20 +196,23 @@ export const FunnelEngine = {
     SessionManager.runOncePerSession(() => {
       this.state.awareness.total_sessions = (this.state.awareness.total_sessions || 0) + 1;
       
-      // GA4 EVENT: Step 1
       this.pushStageEvent('funnel_awareness', {
           initial_referrer: String(this.state.meta?.initial_referrer || 'direct').substring(0, 100),
           utm_source: this.state.meta?.utm?.source || 'organic'
       });
     });
 
+    // ENGINEERED FIX: Failsafe for dev testing when localStorage is cleared but sessionStorage isn't
+    if (this.state.awareness.total_sessions === 0) {
+        this.state.awareness.total_sessions = 1;
+    }
+
     this.state.awareness.total_page_views = (this.state.awareness.total_page_views || 0) + 1;
     const path = window.location.pathname;
     this.state.awareness.visited_pages = this.state.awareness.visited_pages || {};
     this.state.awareness.visited_pages[path] = (this.state.awareness.visited_pages[path] || 0) + 1;
 
-    // Attach IntersectionObservers to semantic sections for dwell time tracking
-    const sections = getListOfSections(true) || [];
+    const sections = getListOfSections() || [];
     this._sectionTimers = this._sectionTimers || [];
     sections.forEach((el) => {
       if (!el) return;
@@ -430,27 +366,14 @@ export const FunnelEngine = {
  * @param {boolean} isWebsite 
  * @returns {Array<HTMLElement>}
  */
-function getListOfSections(isWebsite) {
-  if (!Boolean(isWebsite)) return [];
-  const preferred = ['hero','about','tech','projects','personal','contact'];
-  const found = [];
-
-  const pushIf = (el) => {
-    if (el && !found.includes(el)) found.push(el);
-  };
-
-  preferred.forEach(name => {
-    pushIf(document.getElementById(name));
-    pushIf(document.querySelector(`[data-template="${name}"]`));
-    pushIf(document.querySelector(`.${name}`));
-  });
-
-  if (found.length === 0) {
-    const main = document.getElementById('main-content') || document.querySelector('main') || document.body;
-    const candidates = Array.from(main.querySelectorAll('section, [data-template], [id]'));
-    candidates.forEach(c => pushIf(c));
-  }
-  return found;
+function getListOfSections() {
+ 
+  
+  // ENGINEERED FIX: Rely purely on semantic <section> tags injected by templates
+  const main = document.getElementById('main-content') || document.body;
+  const sections = Array.from(main.querySelectorAll('section'));
+  
+  return sections;
 }
 
 /**
@@ -463,7 +386,10 @@ function calculateTimeOfTop(section) {
   const el = typeof section === 'string' ? document.getElementById(section.replace(/^#/, '')) : section;
   if (!el) return;
 
-  const sectionId = el.id || `section_${Math.random().toString(36).slice(2, 8)}`;
+ // ABSOLUTE GUARANTEE: Read the ID. If it doesn't have an ID, abort tracking. No random junk allowed.
+  const sectionId = el.id || el.getAttribute('data-template');
+  if (!sectionId) return;
+    
   let startTs = null;
   let tickInterval = null;
   const TICK_SECONDS = 15;
@@ -515,13 +441,17 @@ function calculateTimeOfTop(section) {
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+      if (entry.isIntersecting) {
         startTiming();
       } else {
         stopTiming(false);
       }
     });
-  }, { threshold: [0.5] });
+  }, { 
+      // The section must enter the middle 70% of the screen to count as "being read"
+      rootMargin: "-15% 0px -15% 0px", 
+      threshold: 0 // Fires immediately when the margin is crossed
+  });
 
   observer.observe(el);
 

@@ -3,17 +3,20 @@
  * @param {Map<string, any>} state 
  * @returns {Map<string, any>}
  */
-
 export function captureUTMs(state) {
-  // 1. Get current state from localStorage
-  // let state = JSON.parse(localStorage.getItem(String(mainStorageKey)));
+  // 1. Defend against null/undefined state (e.g., First-time visitor)
+  if (!state) {
+    state = {};
+  }
 
-  // 2. Initialize the meta object if it doesn't exist
-  if (!state.meta) state.meta = { utm: {} };
+  // 2. Initialize the meta object safely
+  if (!state.meta) state.meta = {};
+  if (!state.meta.utm) state.meta.utm = {};
 
   // 3. Check if we already captured UTMs in a previous session
-  // (We only want the very first source that brought them to you)
-  if (Object.keys(state.meta.utm).length > 0) return;
+  if (Object.keys(state.meta.utm).length > 0) {
+    return state; // Exit early but MUST return the state
+  }
 
   // 4. Parse the current URL
   const queryParams = new URLSearchParams(window.location.search);
@@ -29,13 +32,10 @@ export function captureUTMs(state) {
       content: queryParams.get("utm_content") || null,
     };
 
-    // Also capture the referrer (e.g., "https://news.ycombinator.com")
+    // Also capture the referrer (e.g., "https://linkedin.com")
     state.meta.initial_referrer = document.referrer || "direct";
-
-    // Save back to local storage
-    // return the state object, because we will initialize more values in the engine.
-    return state;
-    ///localStorage.setItem('arkana_lead_state', JSON.stringify(state));
   }
-}
 
+  // 6. ALWAYS return the state object so FunnelEngine can continue building it
+  return state;
+}

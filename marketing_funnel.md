@@ -2,24 +2,78 @@
 ### marketing
 ## lead gen sales funnel:
 
-how this works:
-as soon as the user lands on our website, a cookie will be set after obtaining the user's consent, 
-this cookie will always be overridden based on events, and the payload is cumulative.
-meaning, 
-`global_data_layer_obtained_from_GA4` will always be there, + at the first visit, we will override it with `awareness` cookie with this extra data, 
-this cookie will be constantly updated by the website, on every engament, [or let gtm handles the update]
-same thing for the other cookies, override with a new cookie name holding the previous cookie data + the new kookie payload. 
-
-
-- global_data_layer_obtained_from_GA4{
-    ga4_user_id: applicable
-    location: if applicable   
-    age: if applicable
-    gender: if applicable
+ this funnel payload: 
+ ```js 
+arkana_lead_state:{
+  "meta": {
+    "version": "1.0",
+    "first_visited_at": "2026-08-22T10:15:30Z",
+    "last_active_at": "2026-08-22T14:20:00Z",
+    "initial_referrer": "https://linkedin.com",
+    "utm": {
+      "source": "linkedin",
+      "medium": "post",
+      "campaign": "architecture_case_study"
+    }
+  },
+  "funnel": {
+    "current_stage": "evaluation", // "awareness" | "interest" | "evaluation" | "intent" | "conversion"
+    "score": 35 // Weighted cumulative score
+  },
+  "awareness": {
+    "total_sessions": 2,
+    "total_page_views": 6,
+    "total_time_seconds": 340,
+    "visited_pages": {
+      "/": 4,
+      "/blog/clean-architecture-monorepos": 2
+    },
+    "sections_browsed_seconds": {
+      "hero": 25,
+      "about": 60,
+      "case_studies": 180,
+      "contact": 75
+    }
+  },
+  "interest": {
+    "explored_team_philosophy": true,
+    "github_repos_clicked": [
+      "flutter_bloc_clean_template",
+      "mqtt_desktop_runner"
+    ]
+  },
+  "evaluation": {
+    "projects_inspected": {
+        "gsp_toolset_windows": {
+          "screenshots_viewed": 5,
+          "checked_impact": true,
+          "external_links_clicked": ["github_demo", "company_website"]
+        },
+        "xcite_immo_saas": {
+          "screenshots_viewed": 3,
+          "checked_impact": true,
+          "external_links_clicked": ["app_store"]
+        } ... the rest of projects
+    }
+  },
+  "intent": {
+    "form_initiated": true,
+    "form_topic_selected": "Architecture Audit & Consulting",
+    "copied_direct_email": false,
+    "time_spent_in_form_seconds": 45
+  },
+  "conversion": {
+    "converted": true,
+    "submitted_at": "2026-08-22T14:25:00Z",
+    "formspree_submission_id": "xyz123"
+  }
 }
-  ==> this part payload will be must exist in all of the funnel cookies, 
+      ``` 
 
-# funnel stages in cookies
+
+
+
+# funnel stages in Storage
 - awareness : score 1 
     => the user knows who we are
 
