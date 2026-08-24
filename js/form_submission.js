@@ -1,7 +1,7 @@
 // ==========================================
 // FORM VALIDATION & BUSINESS LOGIC
 // ==========================================
-import { FunnelEngine } from './funnel_engine.js';
+import { FunnelEngine } from "./funnel_engine/funnel_utils/funnel_engine.js";
 
 export function initForm() {
     const intentSelect = document.getElementById('intent');

@@ -1,4 +1,4 @@
-import { FunnelEngine } from './funnel_engine.js';
+import { FunnelEngine } from "./funnel_engine/funnel_utils/funnel_engine.js";
 
 export function initAnimations() {
     gsap.registerPlugin(ScrollTrigger);

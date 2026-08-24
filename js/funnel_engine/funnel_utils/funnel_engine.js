@@ -1,4 +1,7 @@
-
+import { captureUTMs } from "./utm_parser.js";
+import { ConsentManager } from "../consent_manager/consent_manager.js";
+import { ConsentStorage } from "../consent_manager/consent_storage.js";
+import {SessionManager } from "./session_manager.js"
 
 /** 
  * this funnel payload: 
@@ -73,10 +76,7 @@ arkana_lead_state:{
 // FUNNEL ENGINE & BEHAVIORAL ANALYTICS
 // ==========================================
 
-import { captureUTMs } from "./utm_parser.js";
-import { ConsentManager } from "./consent_manager.js";
-import { ConsentStorage } from "./consent_storage.js";
-import { SessionManager } from "./session_manager.js";
+
 
 /** 
  * FUNNEL PAYLOAD SCHEMA (arkana_lead_state)
