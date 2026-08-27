@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://koussay97.github.io/portfolio_koussay/sitemap.xml
