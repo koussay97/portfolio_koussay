@@ -1,11 +1,42 @@
+<head>
+    <!-- 1. SET DEFAULT CONSENT SYNCHRONOUSLY -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
 
-<!-- Consent Banner -->
-    <div id="arkana-consent-banner" class="consent-banner">
-        <div class="consent-text">
-            <p><strong>Telemetry & Analytics</strong><br>We utilize local storage to periodically sync anonymized session metrics and funnel progression to evaluate architectural interest. You may opt out of non-essential storage.</p>
-        </div>
-        <div class="consent-actions">
-            <button id="btn-consent-necessary" class="consent-btn btn-reject">Necessary Only</button>
-            <button id="btn-consent-all" class="consent-btn btn-accept">Acknowledge & Accept</button>
-        </div>
-    </div>
+        // Read ConsentStorage manually to avoid waiting for modules to load
+        var storedConsent = localStorage.getItem('arkana_consent_state');
+        var isGranted = false;
+        if (storedConsent) {
+            try {
+                var parsed = JSON.parse(storedConsent);
+                isGranted = parsed.analytics_storage && parsed.analytics_storage.granted === true;
+            } catch(e) {}
+        }
+        var defaultStatus = isGranted ? 'granted' : 'denied';
+
+        gtag('consent', 'default', {
+            'analytics_storage': defaultStatus,
+            'ad_storage': defaultStatus,
+            'ad_user_data': defaultStatus,
+            'ad_personalization': defaultStatus,
+            'security_storage': 'granted',
+            'functionality_storage': 'granted',
+            'wait_for_update': 500
+        });
+        
+        gtag('set', 'url_passthrough', true);
+    </script>
+
+    <!-- 2. LOAD GOOGLE ANALYTICS / TAG MANAGER NOW -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX'); // Will respect the 'denied' state perfectly
+    </script>
+
+    <!-- 3. Your App Modules Load Here -->
+    <script type="module" src="app.js"></script>
+</head>

@@ -12,7 +12,7 @@ import {SessionManager } from "./session_manager.js"
 /** 
  * FUNNEL PAYLOAD SCHEMA (arkana_lead_state)
  * This structure is maintained in Storage and periodically synced.
- * 
+ * ```js
  * {
  *   "meta": { "version": "1.0", "first_visited_at": "...", "last_active_at": "...", "utm": {...} },
  *   "funnel": { "current_stage": "awareness", "score": 10 },
@@ -21,10 +21,8 @@ import {SessionManager } from "./session_manager.js"
  *   "evaluation": { "projects_inspected": { "joel_apps": {"screenshots_viewed": 2, "checked_impact": true} } },
  *   "intent": { "form_initiated": true, "form_topic_selected": "b2b_services" },
  *   "conversion": { "converted": true, "submitted_at": "..." }
- * }
- */
+ * } ```
 
-/**
  * Core engine for tracking user behavior, managing funnel state, 
  * and pushing event-driven telemetry to Google Tag Manager (GTM).
  * Respects GDPR by dynamically swapping between localStorage and sessionStorage.
@@ -33,7 +31,7 @@ export const FunnelEngine = {
   /** @type {string} */
   STORAGE: 'arkana_lead_state',
   
-  /** @type {Storage} Dynamically assigned to localStorage or sessionStorage based on consent */
+  /** @type {Storage} Only localStorage is used when consent is granted. */
   storageAPI: localStorage, 
   
   /** @type {Array<Function>} External listeners for real-time hooks */
@@ -44,50 +42,49 @@ export const FunnelEngine = {
 
   /**
    * Bootstraps the Funnel Engine. 
-   * Awaits user consent, determines the storage backend, loads previous state, 
-   * and starts the periodic GTM heartbeat.
+   * Awaits user consent, halts if consent is denied, loads previous state, 
+   * and sets up the exit triggers and periodic heartbeat.
    * @returns {Promise<void>}
    */
   async init() {
-    // 1. Determine Consent Level (0: None, 1: Necessary, 2: All)
-    const consentLevel = ConsentStorage.hasConsentRecorded() ? 
+    // 1. Determine Initial Consent Level (0: None, 1: Necessary, 2: Analytics/All)
+    let consentLevel = ConsentStorage.hasConsentRecorded() ? 
         (ConsentStorage.isGranted(ConsentStorage.ANALYTICS_STORAGE) ? 2 : 1) : 0;
     
-    // 2. Dynamic Backend Swap (GDPR Compliance)
-    this.storageAPI = (consentLevel === 2) ? localStorage : sessionStorage;
-    
-    // 3. Load State
+    this.storageAPI = localStorage; 
     this.state = this.loadState();
+    
     const now = Date.now();
     const lastActive = this.state && this.state.meta ? new Date(this.state.meta.last_active_at).getTime() : 0;
 
-    // 4. Show popup if no state exists, or if the session has been dead for 24h
-    if (!this.state || (lastActive + 24 * 3600 * 1000) < now) {
-      
-      // Halts execution until the user interacts with the consent banner
-      const res = await ConsentManager.verifyAndShowConsentPopup();
-      
-      if (res === 1 || res === 2) {
-        this.storageAPI = (res === 2) ? localStorage : sessionStorage;
-        this.initState();
-        
-        // ENGINEERED FIX: Run awareness BEFORE auto-ping so the session count registers correctly
-        this.update_awareness_payload();
-        SessionManager.startAutoPing(SessionManager.SESSION_DURATION);
-        this.startPeriodicSync();
-      } else {
-        console.warn("Consent rejected. Funnel halted.");
-      }
-    } else {
-      // Returning user: Resume operations silently
-      this.update_awareness_payload();
-      SessionManager.startAutoPing(SessionManager.SESSION_DURATION);
-      this.startPeriodicSync();
+    // 2. Show popup if no consent exists, or if the session has been dead for 24h
+    if (!this.state || (lastActive + 24 * 3600 * 1000) < now || consentLevel === 0) {
+      consentLevel = await ConsentManager.verifyAndShowConsentPopup();
     }
+
+    // 3. STRICT GDPR ENFORCEMENT: Halt entirely if analytics consent is missing
+    if (consentLevel === 1 || consentLevel === 0) {
+      console.warn("User opted out of analytics (or consent missing). FunnelEngine halted.");
+      return; 
+    }
+
+    // 4. We have full Analytics Consent. Proceed with tracking.
+    this.initState();
+    this.update_awareness_payload();
+    SessionManager.startAutoPing(SessionManager.SESSION_DURATION);
+    this.startPeriodicSync();
+
+    // 5. THE EXIT TRIGGER: Capture the final awareness data exactly when the user leaves
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        this.saveState(); // Ensure the latest section timers are saved locally
+        this.syncStateToGA4('page_exit'); // Fire the final payload to GA4
+      }
+    });
   },
 
   /**
-   * Safely reads the funnel state from the active storage API.
+   * Safely reads the funnel state from storage.
    * @returns {Object|null}
    */
   loadState() {
@@ -99,7 +96,7 @@ export const FunnelEngine = {
   },
 
   /**
-   * Persists the current in-memory state to the active storage API.
+   * Persists the current in-memory state to storage.
    */
   saveState() {
     if (this.state) {
@@ -136,8 +133,6 @@ export const FunnelEngine = {
 
   /**
    * Progresses the user down the funnel. Prevents backward demotion.
-   * @param {'awareness'|'interest'|'evaluation'|'intent'|'conversion'} newStage 
-   * @param {number} scoreBoost - Points to add to the lead score
    */
   promoteStage(newStage, scoreBoost) {
     const stages = ['awareness', 'interest', 'evaluation', 'intent', 'conversion'];
@@ -151,58 +146,86 @@ export const FunnelEngine = {
   },
 
   // ==========================================
-  // GA4 / GTM EVENT PIPELINE
+  // GA4 / GTM EVENT PIPELINE (Flattened Sync)
   // ==========================================
 
   /**
-   * Starts the asynchronous heartbeat. Pushes time/score to GTM every 60 seconds.
+   * Starts the fallback asynchronous heartbeat. 
+   * Pushes a flattened snapshot to GA4 every 60 seconds.
    */
   startPeriodicSync() {
     if (this._syncInterval) clearInterval(this._syncInterval);
     
     this._syncInterval = setInterval(() => {
         this.saveState();
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-            event: 'funnel_heartbeat',
-            total_time_seconds: this.state.awareness?.total_time_seconds || 0,
-            funnel_score: this.state.funnel?.score || 0
-        });
+        this.syncStateToGA4('heartbeat_60s');
     }, 60000);
   },
 
   /**
-   * Pushes a flattened, data-rich event to GTM for GA4 Funnel Explorations.
-   * @param {string} stageName - e.g., 'funnel_evaluation'
-   * @param {Object} actionData - e.g., { project_id: 'joel_apps', action: 'flipped' }
+   * Flattens the nested local state and sends a single, consolidated summary to GA4.
+   * @param {string} triggerName - The reason for the sync (e.g., 'page_exit', 'stage_up')
+   * @param {Object} [extraData={}] - Optional trigger-specific data to merge into the payload
    */
-  pushStageEvent(stageName, actionData = {}) {
+  syncStateToGA4(triggerName, extraData = {}) {
+    if (!this.state) return;
+
+    // 1. Flatten arrays and extract key data safely
+    const inspectedProjects = Object.keys(this.state.evaluation?.projects_inspected || {});
+    const githubRepos = this.state.interest?.github_repos_clicked || [];
+    
+    // Find the most visited page based on count
+    const topVisitedPage = Object.entries(this.state.awareness?.visited_pages || {})
+        .sort((a, b) => b[1] - a[1])[0]?.[0] || 'none';
+
+    // 2. Build a strictly flat payload (Numbers and Strings only, GA4 friendly)
+    const flatPayload = {
+      event: 'funnel_state_sync',
+      sync_trigger: String(triggerName).substring(0, 50),
+      
+      // Funnel KPIs
+      lead_score: this.state.funnel?.score || 0,
+      current_stage: this.state.funnel?.current_stage || 'awareness',
+
+      initial_referrer: this.state.meta.initial_referrer,
+      utm_medium: this.state.meta.utm.utm_medium,
+      utm_campaign: this.state.meta.utm.utm_campaign,
+      // Awareness Metrics (Always includes latest accumulated time)
+      total_sessions: this.state.awareness?.total_sessions || 1,
+      total_time_seconds: this.state.awareness?.total_time_seconds || 0,
+      total_page_views: this.state.awareness?.total_page_views || 0,
+      top_page: String(topVisitedPage).substring(0, 100),
+      initial_referrer: String(this.state.meta?.initial_referrer || 'direct').substring(0, 100),
+      utm_source: String(this.state.meta?.utm?.source || 'organic').substring(0, 50),
+      
+      // Interest & Evaluation Dimensions
+      projects_inspected: inspectedProjects.join(',').substring(0, 100) || 'none',
+      github_repos: githubRepos.join(',').substring(0, 100) || 'none',
+      explored_philosophy: this.state.interest?.explored_team_philosophy ? 'yes' : 'no',
+      
+      // Intent Dimensions
+      intent_topic: String(this.state.intent?.form_topic_selected || 'none').substring(0, 100),
+      
+      // Merge any trigger-specific actions (e.g., project_id clicked)
+      ...extraData
+    };
+
+    // 3. Push to GTM
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-        event: stageName,
-        current_score: this.state.funnel?.score || 0,
-        ...actionData // Flattened properties to bypass GA4's nested JSON limits
-    });
+    window.dataLayer.push(flatPayload);
   },
 
   // ==========================================
   // STATE UPDATERS (Track specific user actions)
   // ==========================================
 
-  /**
-   * Tracks base metrics: session counts, page views, and section dwell time.
-   */
   update_awareness_payload() {
     SessionManager.runOncePerSession(() => {
       this.state.awareness.total_sessions = (this.state.awareness.total_sessions || 0) + 1;
-      
-      this.pushStageEvent('funnel_awareness', {
-          initial_referrer: String(this.state.meta?.initial_referrer || 'direct').substring(0, 100),
-          utm_source: this.state.meta?.utm?.source || 'organic'
-      });
+      // Sync immediately on first session load
+      this.syncStateToGA4('session_start'); 
     });
 
-    // ENGINEERED FIX: Failsafe for dev testing when localStorage is cleared but sessionStorage isn't
     if (this.state.awareness.total_sessions === 0) {
         this.state.awareness.total_sessions = 1;
     }
@@ -212,6 +235,7 @@ export const FunnelEngine = {
     this.state.awareness.visited_pages = this.state.awareness.visited_pages || {};
     this.state.awareness.visited_pages[path] = (this.state.awareness.visited_pages[path] || 0) + 1;
 
+    // Start tracking section dwell time
     const sections = getListOfSections() || [];
     this._sectionTimers = this._sectionTimers || [];
     sections.forEach((el) => {
@@ -223,12 +247,6 @@ export const FunnelEngine = {
     this.saveState();
   },
 
-  /**
-   * Tracks when a user explores your philosophy or checks GitHub.
-   * @param {Object} data 
-   * @param {boolean} [data.explored_team_philosophy]
-   * @param {string} [data.github_repo]
-   */
   updateInterest(data = {}) {
     if (!this.state) return;
     this.state.interest = this.state.interest || { explored_team_philosophy: false, github_repos_clicked: [] };
@@ -250,17 +268,12 @@ export const FunnelEngine = {
     this.promoteStage('interest', 10);
     this.saveState();
 
-    // GA4 EVENT: Step 2
-    this.pushStageEvent('funnel_interest', {
-        interest_action: actionDetail.substring(0, 100)
+    // Piggyback GA4 Sync
+    this.syncStateToGA4('stage_promoted_interest', {
+        action_detail: actionDetail.substring(0, 100)
     });
   },
 
-  /**
-   * Tracks deep interaction with portfolio projects.
-   * @param {string} projectId - The ID of the project (e.g., 'joel_apps')
-   * @param {'flipped'|'gallery'|'store_link'} actionType - The interaction type
-   */
   updateEvaluation(projectId, actionType) {
     if (!this.state) return;
     this.state.evaluation.projects_inspected = this.state.evaluation.projects_inspected || {};
@@ -278,29 +291,21 @@ export const FunnelEngine = {
     this.promoteStage('evaluation', 15);
     this.saveState();
 
-    // GA4 EVENT: Step 3 (Highly detailed!)
-    this.pushStageEvent('funnel_evaluation', {
-        project_id: projectId.substring(0, 50),
-        evaluation_action: actionType.substring(0, 50)
+    // Piggyback GA4 Sync
+    this.syncStateToGA4('stage_promoted_evaluation', {
+        interaction_project: projectId.substring(0, 50),
+        interaction_type: actionType.substring(0, 50)
     });
   },
 
-  /**
-   * Tracks when the user interacts with the contact form.
-   * @param {Object} data 
-   * @param {boolean} [data.form_initiated]
-   * @param {string} [data.form_topic_selected]
-   */
   updateIntent(data = {}) {
     if (!this.state) return;
 
     if (data.form_topic_selected) {
         this.state.intent.form_topic_selected = data.form_topic_selected;
         
-        // GA4 EVENT: Step 4
-        this.pushStageEvent('funnel_intent', {
-            topic_selected: String(data.form_topic_selected).substring(0, 100)
-        });
+        // Piggyback sync when they select a topic
+        this.syncStateToGA4('intent_topic_selected');
     }
 
     if (data.form_initiated) this.state.intent.form_initiated = true;
@@ -312,10 +317,6 @@ export const FunnelEngine = {
     this.saveState();
   },
 
-  /**
-   * The ultimate goal. Triggers when the form successfully bypasses validation constraints.
-   * @param {Object} data - Contains submission ID or conversion flags
-   */
   updateConversion(data = {}) {
     if (!this.state) return;
     this.state.conversion.converted = true;
@@ -325,27 +326,16 @@ export const FunnelEngine = {
     this.promoteStage('conversion', 50);
     this.saveState();
 
-    // GA4 EVENT: Step 5 (The Ultimate Goal)
-    this.pushStageEvent('funnel_conversion', {
-        final_topic: String(this.state.intent.form_topic_selected || 'none').substring(0, 100),
-        projects_inspected_count: Object.keys(this.state.evaluation.projects_inspected || {}).length,
-        total_funnel_seconds: this.state.awareness.total_time_seconds || 0
+    // The Ultimate Sync
+    this.syncStateToGA4('stage_promoted_conversion', {
+        conversion_id: String(data.formspree_submission_id || 'none').substring(0, 50)
     });
   },
 
-  /**
-   * Registers external callback functions.
-   * @param {Function} fn 
-   */
   subscribe(fn) {
     this.listeners.push(fn);
   },
 
-  /**
-   * Central dispatcher mapping raw event strings to the correct updaters.
-   * @param {string} eventName 
-   * @param {Object} data 
-   */
   recordEvent(eventName, data) {
     switch(eventName) {
         case 'interest': this.updateInterest(data); break;
@@ -358,35 +348,18 @@ export const FunnelEngine = {
 };
 
 // ==========================================
-// UTILITY FUNCTIONS (Optimized)
+// UTILITY FUNCTIONS
 // ==========================================
 
-/**
- * Scans the DOM for semantic landmarks to track viewport dwell time.
- * @param {boolean} isWebsite 
- * @returns {Array<HTMLElement>}
- */
 function getListOfSections() {
- 
-  
-  // ENGINEERED FIX: Rely purely on semantic <section> tags injected by templates
   const main = document.getElementById('main-content') || document.body;
-  const sections = Array.from(main.querySelectorAll('section'));
-  
-  return sections;
+  return Array.from(main.querySelectorAll('section'));
 }
 
-/**
- * Tracks how many seconds a user spends looking at a specific section.
- * Uses an IntersectionObserver to start/stop a 15-second tick interval.
- * @param {HTMLElement|string} section 
- * @returns {Object} Controller object with a stop() method
- */
 function calculateTimeOfTop(section) {
   const el = typeof section === 'string' ? document.getElementById(section.replace(/^#/, '')) : section;
   if (!el) return;
 
- // ABSOLUTE GUARANTEE: Read the ID. If it doesn't have an ID, abort tracking. No random junk allowed.
   const sectionId = el.id || el.getAttribute('data-template');
   if (!sectionId) return;
     
@@ -398,6 +371,7 @@ function calculateTimeOfTop(section) {
     FunnelEngine.state.awareness.sections_browsed_seconds[sectionId] = (FunnelEngine.state.awareness.sections_browsed_seconds[sectionId] || 0) + TICK_SECONDS;
     FunnelEngine.state.awareness.total_time_seconds = (FunnelEngine.state.awareness.total_time_seconds || 0) + TICK_SECONDS;
     
+    // Save locally ONLY. Do not push to GA4 here to avoid spam.
     SessionManager.debounceEvent('funnel_save', TICK_SECONDS * 1000, () => {
       FunnelEngine.saveState();
     });
@@ -429,7 +403,6 @@ function calculateTimeOfTop(section) {
       FunnelEngine.state.awareness.total_time_seconds = (FunnelEngine.state.awareness.total_time_seconds || 0) + leftover;
     }
 
-    // Force an immediate synchronous save if the tab is closing (beforeunload)
     if (forceSave) {
         FunnelEngine.saveState();
     } else {
@@ -448,16 +421,13 @@ function calculateTimeOfTop(section) {
       }
     });
   }, { 
-      // The section must enter the middle 70% of the screen to count as "being read"
       rootMargin: "-15% 0px -15% 0px", 
-      threshold: 0 // Fires immediately when the margin is crossed
+      threshold: 0 
   });
 
   observer.observe(el);
 
   const visibilityHandler = () => { if (document.hidden) stopTiming(false); };
-  
-  // ENGINEERED FIX: Force synchronous save so we don't lose the final seconds when tab closes
   const beforeUnloadHandler = () => stopTiming(true);
 
   document.addEventListener('visibilitychange', visibilityHandler, { passive: true });
