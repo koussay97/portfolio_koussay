@@ -26,28 +26,74 @@
     outline: none; border-color: var(--accent); background: rgba(255, 255, 255, 0.8);
 }
 .submit-btn { align-self: flex-start; margin-top: 1rem; padding: 12px 24px; font-size: 1rem; }
-
-/* Footer */
 .global-footer { border-top: 1px solid var(--glass-border); padding: 3rem 10%; background: rgba(17, 24, 39, 0.02); }
-.footer-content { display: flex; align-items: center; gap: 2rem; max-width: 1200px; margin: 0 auto; }
+.footer-content { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; }
+.footer-brand { display: flex; align-items: center; gap: 1.5rem; }
 .footer-logo { width: 40px; height: 40px; color: var(--text-main); }
 .footer-text p { margin: 0; color: var(--text-muted); font-size: 0.9rem; }
 .footer-text strong { color: var(--text-main); font-size: 1.1rem; }
 .copyright { margin-top: 0.5rem !important; font-size: 0.8rem !important; opacity: 0.7; }
 
+/* Vetted Badge */
+.vetted-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: rgba(245, 158, 11, 0.05);
+    transition: all 0.3s ease;
+}
+.vetted-badge:hover {
+    background: var(--accent);
+    color: #000;
+}
+.pulse-dot {
+    width: 8px; height: 8px;
+    background-color: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+}
+.vetted-badge:hover .pulse-dot {
+    background-color: #000;
+    box-shadow: none;
+}
+
+/* Social Links */
+.footer-links-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.5rem;
+}
+.social-links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+.social-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+.social-links a:hover {
+    color: var(--accent);
+}
+
 @media (max-width: 900px) {
     .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
     .contact-form-wrapper { padding: 2rem 1.5rem; }
-    .footer-content { flex-direction: column; text-align: center; }
-}
-@media (max-width: 768px) {
-    /* Disable the auto-fit grid and force a strict single column */
-    .personal-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
     
-    .personal-card {
-        padding: 2rem 1.5rem; /* Slightly tighter internal padding for mobile */
-    }
+    .footer-content { flex-direction: column; text-align: center; gap: 3rem; }
+    .footer-brand { flex-direction: column; align-items: center; gap: 1rem; }
+    .footer-links-wrapper { align-items: center; }
+    .social-links { justify-content: center; }
 }
